@@ -1,5 +1,8 @@
-# Main file for implimenting data analysis 
-# on given datasets
+'''
+Main file for implementing data analysis on given datasets.
+Script only (So far)
+'''
+
 
 # Import necessary libraries
 import pandas as pd
