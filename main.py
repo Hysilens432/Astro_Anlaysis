@@ -75,11 +75,42 @@ print(combined.shape) #(51, 46)
 print(combined.columns)
 
 # Plot of Age vs FeH on the combined dataset for the both the vandenBerg and Krausedata
-plt.figure(figsize=(10, 6))
+plt.figure(1, figsize=(10, 6))
 plt.scatter(combined["FeH_vandenBerg"], combined["Age_vandenBerg"], color='blue', label='vandenBerg')
 plt.scatter(combined["FeH_Krause"], combined["Age_Krause"], color='red', label='Krause')
 plt.xlabel("FeH")
-plt.ylabel("Age")
-plt.title("Age vs FeH for vandenBerg Clusters")
+plt.ylabel("Age (Gyr)")
+plt.title("Age vs FeH for van den Berg and Krause Clusters")
+plt.legend()
+plt.show()
+
+
+# Look at systematic differences between the age measurements in the Krause and vandenBerg datasets. 
+plt.figure(2, figsize=(10, 6))
+plt.scatter(combined["Age_vandenBerg"], combined["Age_Krause"], color='blue')
+# Add line y=x to see if the points are systematically above or below the line.
+low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
+high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
+plt.axline((0, 0), slope=1, color='red', linestyle='--', label='y=x')
+plt.xlim(low_bound, high_bound)
+plt.ylim(low_bound, high_bound)
+plt.xlabel("Age van den Berg (Gyr)")
+plt.ylabel("Age Krause (Gyr)")
+plt.title("Age Comparison between van den Berg and Krause Clusters")
+plt.legend()
+plt.show()
+
+# Look at systematic differences between the FeH measurements in the Krause and vandenBerg datasets. 
+plt.figure(3, figsize=(10, 6))
+plt.scatter(combined["FeH_vandenBerg"], combined["FeH_Krause"], color='blue')
+# Add line y=x to see if the points are systematically above or below the line.
+low_bound = min(combined["FeH_vandenBerg"].min(), combined["FeH_Krause"].min()) - 0.1
+high_bound = max(combined["FeH_vandenBerg"].max(), combined["FeH_Krause"].max()) + 0.1
+plt.axline((0, 0), slope=1, color='red', linestyle='--', label='y=x')
+plt.xlim(low_bound, high_bound)
+plt.ylim(low_bound, high_bound)
+plt.xlabel("FeH van den Berg")
+plt.ylabel("FeH Krause")
+plt.title("FeH Comparison between van den Berg and Krause Clusters")
 plt.legend()
 plt.show()
