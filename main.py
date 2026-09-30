@@ -1,10 +1,12 @@
 '''
+
 Main file for implementing data analysis on given datasets.
 Script only (So far)
 '''
 
 # Import necessary libraries
 import pandas as pd
+import numpy as np
 from utils.csv_import import csv_import
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -20,7 +22,64 @@ HarrisPartI = csv_import(HARRIS_I)
 HarrisPartIII = csv_import(HARRIS_III)
 Krause21 = csv_import(KRAUSE_21)
 vandenBerg_table2 = csv_import(VANDENBERG_TABLE2)
-#print(HarrisPartI.head())
-#print(HarrisPartI.info())
 
+# These are the columns in the raw dataframes that contain the clusters identifiers. 
+#print(HarrisPartI["ID"])
+#print(HarrisPartIII["ID"])
+#print(Krause21["Object"])
+#print(vandenBerg_table2["#NGC"])
 
+# Create unified Cluster_ID column in each dataframe to easily compare which clusters
+# exist across all datasets. 
+#HarrisPartI_test = HarrisPartI.copy()
+HarrisPartI["Cluster_ID"] = HarrisPartI["ID"].str.replace(" ", "")
+#print(HarrisPartI_test.head())
+
+#HarrisPartIII_test = HarrisPartIII.copy()
+HarrisPartIII["Cluster_ID"] = HarrisPartIII["ID"].str.replace(" ", "")
+#print(HarrisPartIII_test.head())
+
+#Krause21_test = Krause21.copy()
+Krause21["Cluster_ID"] = Krause21["Object"].str.replace(" ", "")
+#print(Krause21_test.head())
+
+#vandenBerg_table2_test = vandenBerg_table2.copy()
+vandenBerg_table2["Cluster_ID"] = "NGC" + vandenBerg_table2["#NGC"].astype(str)
+#print(vandenBerg_table2_test.head())
+
+# Check for duplucated Cluster_IDs in each dataframe.
+print("HarrisPartI_test duplicated Cluster_IDs: ", HarrisPartI["Cluster_ID"].duplicated().sum())
+print("HarrisPartIII_test duplicated Cluster_IDs: ", HarrisPartIII["Cluster_ID"].duplicated().sum())
+print("Krause21_test duplicated Cluster_IDs: ", Krause21["Cluster_ID"].duplicated().sum())
+print("vandenBerg_table2_test duplicated Cluster_IDs: ", vandenBerg_table2["Cluster_ID"].duplicated().sum())
+
+#### vandenBerg_table2 has three duplicate IDs. The bottom three entries have no numbers.
+#### They are saved as NGCXXXX. They should be removed when we merge in the next step. 
+
+# Rename Age and FeH columns to include which dataset they came from. 
+vandenBerg_table2 = vandenBerg_table2.rename(columns={"Age": "Age_vandenBerg", "FeH": "FeH_vandenBerg"})
+Krause21 = Krause21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
+print(vandenBerg_table2.head())
+print(Krause21.head())
+
+# Merge into one combined dateframe keeping all the columns. 
+# merge uses inner by default. Only combines rows with matching Cluster_IDs. 
+combined = pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
+print(combined.shape) #(157, 25)
+combined = pd.merge(combined, Krause21, on="Cluster_ID")
+print(combined.shape) #(59, 33)
+combined = pd.merge(combined, vandenBerg_table2, on="Cluster_ID")
+print(combined.shape) #(51, 46)
+
+#### After merging, there are 51 clusters that appear in all four datasets. 
+print(combined.columns)
+
+# Plot of Age vs FeH on the combined dataset for the both the vandenBerg and Krausedata
+plt.figure(figsize=(10, 6))
+plt.scatter(combined["FeH_vandenBerg"], combined["Age_vandenBerg"], color='blue', label='vandenBerg')
+plt.scatter(combined["FeH_Krause"], combined["Age_Krause"], color='red', label='Krause')
+plt.xlabel("FeH")
+plt.ylabel("Age")
+plt.title("Age vs FeH for vandenBerg Clusters")
+plt.legend()
+plt.show()
