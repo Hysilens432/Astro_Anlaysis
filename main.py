@@ -93,27 +93,23 @@ fig, ax = plt.subplots(figsize=(10, 6))
 sns.scatterplot(data=combined, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
 low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
 high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
-ax.axline((0, 0), slope=1, color="red", linestyle="--", label="y=x")
+ax.axline((0, 0), slope=1, color="red", linestyle="--", label="y=x") # regression reference
 ax.set(xlim=(low_bound, high_bound), ylim=(low_bound, high_bound),
        xlabel="Age van den Berg (Gyr)", ylabel="Age Krause (Gyr)",
        title="Age Comparison between van den Berg and Krause Clusters")
 ax.legend()
 plt.show()
 
+# Plot systematic differences between the FeH measurements
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=combined, x="FeH_vandenBerg", y="FeH_Krause", color="blue", ax=ax)
 
-''' 
-# Look at systematic differences between the FeH measurements in the Krause and vandenBerg datasets. 
-plt.figure(3, figsize=(10, 6))
-plt.scatter(combined["FeH_vandenBerg"], combined["FeH_Krause"], color='blue')
-# Add line y=x to see if the points are systematically above or below the line.
 low_bound = min(combined["FeH_vandenBerg"].min(), combined["FeH_Krause"].min()) - 0.1
 high_bound = max(combined["FeH_vandenBerg"].max(), combined["FeH_Krause"].max()) + 0.1
-plt.axline((0, 0), slope=1, color='red', linestyle='--', label='y=x')
-plt.xlim(low_bound, high_bound)
-plt.ylim(low_bound, high_bound)
-plt.xlabel("FeH van den Berg")
-plt.ylabel("FeH Krause")
-plt.title("FeH Comparison between van den Berg and Krause Clusters")
-plt.legend()
+
+ax.axline((0, 0), slope=1, color="red", linestyle="--", label="y=x")
+ax.set(xlim=(low_bound, high_bound), ylim=(low_bound, high_bound),
+       xlabel="FeH van den Berg", ylabel="FeH Krause",
+       title="FeH Comparison between van den Berg and Krause Clusters")
+ax.legend()
 plt.show()
-'''
