@@ -76,6 +76,20 @@ print(combined.shape) #(51, 46)
 
 #### After merging, there are 51 clusters that appear in all four datasets. 
 print(combined.columns)
+
+# Age - FeH plot for vandenBerg and Krause datasets
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=combined, x="FeH_vandenBerg", y="Age_vandenBerg",
+                color="blue", label="vandenBerg", ax=ax)
+ax.set(xlabel="FeH", ylabel="Age (Gyr)",
+       title="Age vs FeH for van den Berg and Krause Clusters")
+ax.legend()
+plt.show()
+
+
+
+
+
 ''' 
 # Plot of Age vs FeH on the combined dataset for the both the vandenBerg and Krausedata
 plt.figure(1, figsize=(10, 6))
