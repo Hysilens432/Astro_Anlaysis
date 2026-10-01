@@ -93,17 +93,6 @@ plt.show()
 
 
 ''' 
-# Plot of Age vs FeH on the combined dataset for the both the vandenBerg and Krausedata
-plt.figure(1, figsize=(10, 6))
-plt.scatter(combined["FeH_vandenBerg"], combined["Age_vandenBerg"], color='blue', label='vandenBerg')
-plt.scatter(combined["FeH_Krause"], combined["Age_Krause"], color='red', label='Krause')
-plt.xlabel("FeH")
-plt.ylabel("Age (Gyr)")
-plt.title("Age vs FeH for van den Berg and Krause Clusters")
-plt.legend()
-plt.show()
-
-
 # Look at systematic differences between the age measurements in the Krause and vandenBerg datasets. 
 plt.figure(2, figsize=(10, 6))
 plt.scatter(combined["Age_vandenBerg"], combined["Age_Krause"], color='blue')
