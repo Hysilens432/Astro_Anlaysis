@@ -83,6 +83,8 @@ sns.scatterplot(data=combined, x="FeH_vandenBerg", y="Age_vandenBerg",
                 color="blue", label="Van den Bergh", ax=ax)
 ax.set(xlabel="FeH", ylabel="Age (Gyr)",
        title="Age vs FeH for Van den Bergh and Krause Clusters")
+sns.scatterplot(data=combined, x="FeH_Krause", y="Age_Krause",
+                color="red", label="Krause", ax=ax)
 ax.legend()
 plt.show()
 
