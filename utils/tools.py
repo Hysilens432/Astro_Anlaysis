@@ -1,8 +1,5 @@
 '''
-This utility module reads CSV files and returns
-them as pandas DataFrame objects.
-    Input: path (str): The file path to the CSV file.
-    Output: pandas.DataFrame: The DataFrame containing the CSV data.
+This utility module provides essential tools for use at main.py.
 '''
 
 import os 
@@ -10,6 +7,10 @@ import pandas as pd
 
 def csv_import(path):
     '''
+    reads CSV files and returns them as pandas DataFrame objects.
+    Input: path (str): The file path to the CSV file.
+    Output: pandas.DataFrame: The DataFrame containing the CSV data.
+    
     Perform Path Validation,
     Import CSV file as dataframes, return the
     data frame object corresponding to the CSV file at the given path.
