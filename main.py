@@ -17,6 +17,9 @@ HARRIS_III = "./dataset/HarrisPartIII.csv"
 KRAUSE_21 = "./dataset/Krause21.csv"
 VANDENBERG_TABLE2 = "./dataset/vandenBerg_table2.csv"
 
+# Settings
+sns.set_theme(style="whitegrid")  
+
 # Read the csv files into dataframes
 HarrisPartI = csv_import(HARRIS_I)
 HarrisPartIII = csv_import(HARRIS_III)
@@ -73,7 +76,7 @@ print(combined.shape) #(51, 46)
 
 #### After merging, there are 51 clusters that appear in all four datasets. 
 print(combined.columns)
-
+''' 
 # Plot of Age vs FeH on the combined dataset for the both the vandenBerg and Krausedata
 plt.figure(1, figsize=(10, 6))
 plt.scatter(combined["FeH_vandenBerg"], combined["Age_vandenBerg"], color='blue', label='vandenBerg')
@@ -114,3 +117,4 @@ plt.ylabel("FeH Krause")
 plt.title("FeH Comparison between van den Berg and Krause Clusters")
 plt.legend()
 plt.show()
+'''
