@@ -7,7 +7,7 @@ Script only (So far)
 # Import necessary libraries
 import pandas as pd
 import numpy as np
-from utils.csv_import import csv_import
+from utils.tools import csv_import
 import matplotlib.pyplot as plt
 import seaborn as sns
 
