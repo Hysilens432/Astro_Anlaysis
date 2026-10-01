@@ -102,21 +102,6 @@ plt.show()
 
 
 ''' 
-# Look at systematic differences between the age measurements in the Krause and vandenBerg datasets. 
-plt.figure(2, figsize=(10, 6))
-plt.scatter(combined["Age_vandenBerg"], combined["Age_Krause"], color='blue')
-# Add line y=x to see if the points are systematically above or below the line.
-low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
-high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
-plt.axline((0, 0), slope=1, color='red', linestyle='--', label='y=x')
-plt.xlim(low_bound, high_bound)
-plt.ylim(low_bound, high_bound)
-plt.xlabel("Age van den Berg (Gyr)")
-plt.ylabel("Age Krause (Gyr)")
-plt.title("Age Comparison between van den Berg and Krause Clusters")
-plt.legend()
-plt.show()
-
 # Look at systematic differences between the FeH measurements in the Krause and vandenBerg datasets. 
 plt.figure(3, figsize=(10, 6))
 plt.scatter(combined["FeH_vandenBerg"], combined["FeH_Krause"], color='blue')
