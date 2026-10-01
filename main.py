@@ -18,7 +18,7 @@ KRAUSE_21 = "./dataset/Krause21.csv"
 VANDENBERG_TABLE2 = "./dataset/vandenBerg_table2.csv"
 
 # Settings
-sns.set_theme(palette="pastel", style="whitegrid")  
+sns.set_theme(context="paper", palette="pastel", style="whitegrid")  
 
 # Read the csv files into dataframes
 HarrisPartI = csv_import(HARRIS_I)
