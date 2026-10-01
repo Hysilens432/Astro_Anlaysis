@@ -88,8 +88,17 @@ sns.scatterplot(data=combined, x="FeH_Krause", y="Age_Krause",
 ax.legend()
 plt.show()
 
-
-
+# Plot systematic differences between the age measurements
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=combined, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
+low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
+high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
+ax.axline((0, 0), slope=1, color="red", linestyle="--", label="y=x")
+ax.set(xlim=(low_bound, high_bound), ylim=(low_bound, high_bound),
+       xlabel="Age van den Berg (Gyr)", ylabel="Age Krause (Gyr)",
+       title="Age Comparison between van den Berg and Krause Clusters")
+ax.legend()
+plt.show()
 
 
 ''' 
