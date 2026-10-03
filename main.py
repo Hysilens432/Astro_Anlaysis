@@ -16,6 +16,8 @@ HARRIS_I = "./dataset/HarrisPartI.csv"
 HARRIS_III = "./dataset/HarrisPartIII.csv"
 KRAUSE_21 = "./dataset/Krause21.csv"
 VANDENBERG_TABLE2 = "./dataset/vandenBerg_table2.csv"
+PLOT_WIDTH = 10
+PLOT_HEIGHT = 6
 
 # Settings
 sns.set_theme(context="paper", palette="pastel", style="whitegrid")
@@ -94,7 +96,7 @@ print(combined.columns.duplicated().sum())
 combined.to_csv("./output/combined.csv")
 
 # Age - FeH plot for Vandenberg and Krause datasets
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(
     data=combined,
     x="FeH_vandenBerg",
@@ -115,7 +117,7 @@ ax.legend()
 plt.show()
 
 # Plot systematic differences between the age measurements
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(data=combined, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
 low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
 high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
