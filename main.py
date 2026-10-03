@@ -7,7 +7,7 @@ Script only (So far)
 # Import necessary libraries
 import pandas as pd
 import numpy as np
-from utils.tools import csv_import
+import utils.tools as tc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -23,10 +23,10 @@ PLOT_HEIGHT = 6
 sns.set_theme(context="paper", palette="pastel", style="whitegrid")
 
 # Read the csv files into dataframes
-HarrisPartI = csv_import(HARRIS_I)
-HarrisPartIII = csv_import(HARRIS_III)
-Krause21 = csv_import(KRAUSE_21)
-vandenBerg_table2 = csv_import(VANDENBERG_TABLE2)
+HarrisPartI = tc.csv_import(HARRIS_I)
+HarrisPartIII = tc.csv_import(HARRIS_III)
+Krause21 = tc.csv_import(KRAUSE_21)
+vandenBerg_table2 = tc.csv_import(VANDENBERG_TABLE2)
 
 # These are the columns in the raw dataframes that contain the clusters identifiers.
 # print(HarrisPartI["ID"])
