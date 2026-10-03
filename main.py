@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Constants
-HARRIS_I = "./dataset/harI.csv"
-HARRIS_III = "./dataset/harIII.csv"
-KRAUSE_21 = "./dataset/kr21.csv"
-vdb = "./dataset/vdb.csv"
+HARRIS_I = "./dataset/HarrisPartI.csv"
+HARRIS_III = "./dataset/HarrisPartIII.csv"
+KRAUSE_21 = "./dataset/Krause21.csv"
+VDB = "./dataset/vdBerg_table2.csv"
 PLOT_WIDTH = 10
 PLOT_HEIGHT = 6
 
@@ -26,7 +26,7 @@ sns.set_theme(context="paper", palette="pastel", style="whitegrid")
 harI = tc.csv_import(HARRIS_I)
 harIII = tc.csv_import(HARRIS_III)
 kr21 = tc.csv_import(KRAUSE_21)
-vdb = tc.csv_import(vdb)
+vdb = tc.csv_import(VDB)
 
 # These are the columns in the raw dataframes that contain the clusters identifiers.
 # print(harI["ID"])
