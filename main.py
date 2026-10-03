@@ -15,7 +15,7 @@ import seaborn as sns
 HARRIS_I = "./dataset/HarrisPartI.csv"
 HARRIS_III = "./dataset/HarrisPartIII.csv"
 KRAUSE_21 = "./dataset/Krause21.csv"
-VDB = "./dataset/vdBerg_table2.csv"
+VDB = "./dataset/vandenBerg_table2.csv"
 PLOT_WIDTH = 10
 PLOT_HEIGHT = 6
 
