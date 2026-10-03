@@ -90,6 +90,8 @@ print(combined.shape)  # (51, 46)
 #### After merging, there are 51 clusters that appear in all four datasets.
 print(combined.columns)
 
+combined.tocsv("./output/combined.csv")
+
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.scatterplot(
