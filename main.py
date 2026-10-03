@@ -104,7 +104,7 @@ DATASET = (
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(
-    data=combined,
+    data=DATASET,
     x="FeH_vandenBerg",
     y="Age_vandenBerg",
     color="blue",
@@ -117,16 +117,16 @@ ax.set(
     title="Age vs FeH for Van den Bergh and Krause Clusters",
 )
 sns.scatterplot(
-    data=combined, x="FeH_Krause", y="Age_Krause", color="red", label="Krause", ax=ax
+    data=DATASET, x="FeH_Krause", y="Age_Krause", color="red", label="Krause", ax=ax
 )
 ax.legend()
 plt.show()
 
 # Plot systematic differences between the age measurements
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-sns.scatterplot(data=combined, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
-low_bound = min(combined["Age_vandenBerg"].min(), combined["Age_Krause"].min()) - 0.5
-high_bound = max(combined["Age_vandenBerg"].max(), combined["Age_Krause"].max()) + 0.5
+sns.scatterplot(data=DATASET, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
+low_bound = min(DATASET["Age_vandenBerg"].min(), DATASET["Age_Krause"].min()) - 0.5
+high_bound = max(DATASET["Age_vandenBerg"].max(), DATASET["Age_Krause"].max()) + 0.5
 ax.axline(
     (0, 0), slope=1, color="red", linestyle="--", label="y=x"
 )  # regression reference
@@ -142,10 +142,10 @@ plt.show()
 
 # Plot systematic differences between the FeH measurements
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-sns.scatterplot(data=combined, x="FeH_vandenBerg", y="FeH_Krause", color="blue", ax=ax)
+sns.scatterplot(data=DATASET, x="FeH_vandenBerg", y="FeH_Krause", color="blue", ax=ax)
 
-low_bound = min(combined["FeH_vandenBerg"].min(), combined["FeH_Krause"].min()) - 0.1
-high_bound = max(combined["FeH_vandenBerg"].max(), combined["FeH_Krause"].max()) + 0.1
+low_bound = min(DATASET["FeH_vandenBerg"].min(), DATASET["FeH_Krause"].min()) - 0.1
+high_bound = max(DATASET["FeH_vandenBerg"].max(), DATASET["FeH_Krause"].max()) + 0.1
 
 ax.axline((0, 0), slope=1, color="red", linestyle="--", label="y=x")
 ax.set(
