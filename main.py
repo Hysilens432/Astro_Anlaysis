@@ -88,7 +88,7 @@ combined = pd.merge(combined, vandenBerg_table2, on="Cluster_ID")
 print(combined.shape)  # (51, 46)
 
 #### After merging, there are 51 clusters that appear in all four datasets.
-print(combined.columns.duplicated())
+print(combined.columns.duplicated().sum())
 
 combined.to_csv("./output/combined.csv")
 
