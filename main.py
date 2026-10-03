@@ -80,6 +80,7 @@ Krause21 = Krause21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
 print(vandenBerg_table2.head())
 print(Krause21.head())
 
+"""
 # Merge into one combined dateframe keeping all the columns.
 # merge uses inner by default. Only combines rows with matching Cluster_IDs.
 combined = pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
@@ -90,10 +91,16 @@ combined = pd.merge(combined, vandenBerg_table2, on="Cluster_ID")
 print(combined.shape)  # (51, 46)
 
 #### After merging, there are 51 clusters that appear in all four datasets.
-print(combined.columns)
 print(combined.columns.duplicated().sum())
+"""
 
-combined.to_csv("./output/combined.csv")
+# Note: I simplified merge here.
+dataset = (
+    pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
+    .merge(Krause21, on="Cluster_ID")
+    .merge(vandenBerg_table2, on="Cluster_ID")
+)
+dataset.to_csv("./output/dataset.csv")
 
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
