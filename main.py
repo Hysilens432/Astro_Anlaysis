@@ -52,6 +52,7 @@ kr21["Cluster_ID"] = kr21["Object"].str.replace(" ", "")
 vdb["Cluster_ID"] = "NGC" + vdb["#NGC"].astype(str)
 # print(vandenBerg_table2_test.head())
 
+"""
 # Check for duplucated Cluster_IDs in each dataframe.
 print(
     "harI_test duplicated Cluster_IDs: ",
@@ -69,6 +70,8 @@ print(
 
 #### vdb has three duplicate IDs. The bottom three entries have no numbers.
 #### They are saved as NGCXXXX. They should be removed when we merge in the next step.
+"""
+# checking duplicates are redundant given we used merge function unless it serves another purpose??
 
 # Rename Age and FeH columns to include which dataset they came from.
 vdb = vdb.rename(columns={"Age": "Age_vandenBerg", "FeH": "FeH_vandenBerg"})
