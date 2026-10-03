@@ -135,7 +135,7 @@ ax.legend()
 plt.show()
 
 # Plot systematic differences between the FeH measurements
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(data=combined, x="FeH_vandenBerg", y="FeH_Krause", color="blue", ax=ax)
 
 low_bound = min(combined["FeH_vandenBerg"].min(), combined["FeH_Krause"].min()) - 0.1
