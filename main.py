@@ -94,13 +94,12 @@ print(combined.shape)  # (51, 46)
 print(combined.columns.duplicated().sum())
 """
 
-# Note: I simplified merge here.
-dataset = (
+# Note: I simplified merge here. DATASET should be constant unless wee wanna change it.
+DATASET = (
     pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
     .merge(Krause21, on="Cluster_ID")
     .merge(vandenBerg_table2, on="Cluster_ID")
 )
-dataset.to_csv("./output/dataset.csv")
 
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
