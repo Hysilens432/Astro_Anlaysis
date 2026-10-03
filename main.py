@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Constants
-HARRIS_I = "./dataset/HarrisPartI.csv"
-HARRIS_III = "./dataset/HarrisPartIII.csv"
+HARRIS_I = "./dataset/HarPTI.csv"
+HARRIS_III = "./dataset/HarPTIII.csv"
 KRAUSE_21 = "./dataset/Krause21.csv"
 VANDENBERG_TABLE2 = "./dataset/vandenBerg_table2.csv"
 PLOT_WIDTH = 10
@@ -23,26 +23,26 @@ PLOT_HEIGHT = 6
 sns.set_theme(context="paper", palette="pastel", style="whitegrid")
 
 # Read the csv files into dataframes
-HarrisPartI = tc.csv_import(HARRIS_I)
-HarrisPartIII = tc.csv_import(HARRIS_III)
+HarPTI = tc.csv_import(HARRIS_I)
+HarPTIII = tc.csv_import(HARRIS_III)
 Krause21 = tc.csv_import(KRAUSE_21)
 vandenBerg_table2 = tc.csv_import(VANDENBERG_TABLE2)
 
 # These are the columns in the raw dataframes that contain the clusters identifiers.
-# print(HarrisPartI["ID"])
-# print(HarrisPartIII["ID"])
+# print(HarPTI["ID"])
+# print(HarPTIII["ID"])
 # print(Krause21["Object"])
 # print(vandenBerg_table2["#NGC"])
 
 # Create unified Cluster_ID column in each dataframe to easily compare which clusters
 # exist across all datasets.
-# HarrisPartI_test = HarrisPartI.copy()
-HarrisPartI["Cluster_ID"] = HarrisPartI["ID"].str.replace(" ", "")
-# print(HarrisPartI_test.head())
+# HarPTI_test = HarPTI.copy()
+HarPTI["Cluster_ID"] = HarPTI["ID"].str.replace(" ", "")
+# print(HarPTI_test.head())
 
-# HarrisPartIII_test = HarrisPartIII.copy()
-HarrisPartIII["Cluster_ID"] = HarrisPartIII["ID"].str.replace(" ", "")
-# print(HarrisPartIII_test.head())
+# HarPTIII_test = HarPTIII.copy()
+HarPTIII["Cluster_ID"] = HarPTIII["ID"].str.replace(" ", "")
+# print(HarPTIII_test.head())
 
 # Krause21_test = Krause21.copy()
 Krause21["Cluster_ID"] = Krause21["Object"].str.replace(" ", "")
@@ -54,12 +54,12 @@ vandenBerg_table2["Cluster_ID"] = "NGC" + vandenBerg_table2["#NGC"].astype(str)
 
 # Check for duplucated Cluster_IDs in each dataframe.
 print(
-    "HarrisPartI_test duplicated Cluster_IDs: ",
-    HarrisPartI["Cluster_ID"].duplicated().sum(),
+    "HarPTI_test duplicated Cluster_IDs: ",
+    HarPTI["Cluster_ID"].duplicated().sum(),
 )
 print(
-    "HarrisPartIII_test duplicated Cluster_IDs: ",
-    HarrisPartIII["Cluster_ID"].duplicated().sum(),
+    "HarPTIII_test duplicated Cluster_IDs: ",
+    HarPTIII["Cluster_ID"].duplicated().sum(),
 )
 print(
     "Krause21_test duplicated Cluster_IDs: ", Krause21["Cluster_ID"].duplicated().sum()
@@ -83,7 +83,7 @@ print(Krause21.head())
 """
 # Merge into one combined dateframe keeping all the columns.
 # merge uses inner by default. Only combines rows with matching Cluster_IDs.
-combined = pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
+combined = pd.merge(HarPTI, HarPTIII, on="Cluster_ID")
 print(combined.shape)  # (157, 25)
 combined = pd.merge(combined, Krause21, on="Cluster_ID")
 print(combined.shape)  # (59, 33)
@@ -96,7 +96,7 @@ print(combined.columns.duplicated().sum())
 
 # Note: I simplified merge here. DATASET should be constant unless wee wanna change it.
 DATASET = (
-    pd.merge(HarrisPartI, HarrisPartIII, on="Cluster_ID")
+    pd.merge(HarPTI, HarPTIII, on="Cluster_ID")
     .merge(Krause21, on="Cluster_ID")
     .merge(vandenBerg_table2, on="Cluster_ID")
 )
