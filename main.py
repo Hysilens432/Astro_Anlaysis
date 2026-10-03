@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Constants
-HARRIS_I = "./dataset/HarPTI.csv"
-HARRIS_III = "./dataset/HarPTIII.csv"
-KRAUSE_21 = "./dataset/Krause21.csv"
-VANDENBERG_TABLE2 = "./dataset/vandenBerg_table2.csv"
+HARRIS_I = "./dataset/harI.csv"
+HARRIS_III = "./dataset/harIII.csv"
+KRAUSE_21 = "./dataset/kr21.csv"
+vdb = "./dataset/vdb.csv"
 PLOT_WIDTH = 10
 PLOT_HEIGHT = 6
 
@@ -23,71 +23,67 @@ PLOT_HEIGHT = 6
 sns.set_theme(context="paper", palette="pastel", style="whitegrid")
 
 # Read the csv files into dataframes
-HarPTI = tc.csv_import(HARRIS_I)
-HarPTIII = tc.csv_import(HARRIS_III)
-Krause21 = tc.csv_import(KRAUSE_21)
-vandenBerg_table2 = tc.csv_import(VANDENBERG_TABLE2)
+harI = tc.csv_import(HARRIS_I)
+harIII = tc.csv_import(HARRIS_III)
+kr21 = tc.csv_import(KRAUSE_21)
+vdb = tc.csv_import(vdb)
 
 # These are the columns in the raw dataframes that contain the clusters identifiers.
-# print(HarPTI["ID"])
-# print(HarPTIII["ID"])
-# print(Krause21["Object"])
-# print(vandenBerg_table2["#NGC"])
+# print(harI["ID"])
+# print(harIII["ID"])
+# print(kr21["Object"])
+# print(vdb["#NGC"])
 
 # Create unified Cluster_ID column in each dataframe to easily compare which clusters
 # exist across all datasets.
-# HarPTI_test = HarPTI.copy()
-HarPTI["Cluster_ID"] = HarPTI["ID"].str.replace(" ", "")
-# print(HarPTI_test.head())
+# harI_test = harI.copy()
+harI["Cluster_ID"] = harI["ID"].str.replace(" ", "")
+# print(harI_test.head())
 
-# HarPTIII_test = HarPTIII.copy()
-HarPTIII["Cluster_ID"] = HarPTIII["ID"].str.replace(" ", "")
-# print(HarPTIII_test.head())
+# harIII_test = harIII.copy()
+harIII["Cluster_ID"] = harIII["ID"].str.replace(" ", "")
+# print(harIII_test.head())
 
-# Krause21_test = Krause21.copy()
-Krause21["Cluster_ID"] = Krause21["Object"].str.replace(" ", "")
-# print(Krause21_test.head())
+# kr21_test = kr21.copy()
+kr21["Cluster_ID"] = kr21["Object"].str.replace(" ", "")
+# print(kr21_test.head())
 
-# vandenBerg_table2_test = vandenBerg_table2.copy()
-vandenBerg_table2["Cluster_ID"] = "NGC" + vandenBerg_table2["#NGC"].astype(str)
+# vandenBerg_table2_test = vdb.copy()
+vdb["Cluster_ID"] = "NGC" + vdb["#NGC"].astype(str)
 # print(vandenBerg_table2_test.head())
 
 # Check for duplucated Cluster_IDs in each dataframe.
 print(
-    "HarPTI_test duplicated Cluster_IDs: ",
-    HarPTI["Cluster_ID"].duplicated().sum(),
+    "harI_test duplicated Cluster_IDs: ",
+    harI["Cluster_ID"].duplicated().sum(),
 )
 print(
-    "HarPTIII_test duplicated Cluster_IDs: ",
-    HarPTIII["Cluster_ID"].duplicated().sum(),
+    "harIII_test duplicated Cluster_IDs: ",
+    harIII["Cluster_ID"].duplicated().sum(),
 )
-print(
-    "Krause21_test duplicated Cluster_IDs: ", Krause21["Cluster_ID"].duplicated().sum()
-)
+print("kr21_test duplicated Cluster_IDs: ", kr21["Cluster_ID"].duplicated().sum())
 print(
     "vandenBerg_table2_test duplicated Cluster_IDs: ",
-    vandenBerg_table2["Cluster_ID"].duplicated().sum(),
+    vdb["Cluster_ID"].duplicated().sum(),
 )
 
-#### vandenBerg_table2 has three duplicate IDs. The bottom three entries have no numbers.
+#### vdb has three duplicate IDs. The bottom three entries have no numbers.
 #### They are saved as NGCXXXX. They should be removed when we merge in the next step.
 
 # Rename Age and FeH columns to include which dataset they came from.
-vandenBerg_table2 = vandenBerg_table2.rename(
-    columns={"Age": "Age_vandenBerg", "FeH": "FeH_vandenBerg"}
-)
-Krause21 = Krause21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
-print(vandenBerg_table2.head())
-print(Krause21.head())
+vdb = vdb.rename(columns={"Age": "Age_vandenBerg", "FeH": "FeH_vandenBerg"})
+kr21 = kr21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
+print(vdb.head())
+print(kr21.head())
 
 """
 # Merge into one combined dateframe keeping all the columns.
 # merge uses inner by default. Only combines rows with matching Cluster_IDs.
-combined = pd.merge(HarPTI, HarPTIII, on="Cluster_ID")
+combined = pd.merge(harI, harIII, on="Cluster_ID")
 print(combined.shape)  # (157, 25)
-combined = pd.merge(combined, Krause21, on="Cluster_ID")
+combined = pd.merge(combined, kr21, on="Cluster_ID")
 print(combined.shape)  # (59, 33)
-combined = pd.merge(combined, vandenBerg_table2, on="Cluster_ID")
+combined = pd.merge(combined, vdb, on="Cluster_ID")
 print(combined.shape)  # (51, 46)
 
 #### After merging, there are 51 clusters that appear in all four datasets.
@@ -96,9 +92,9 @@ print(combined.columns.duplicated().sum())
 
 # Note: I simplified merge here. DATASET should be constant unless wee wanna change it.
 DATASET = (
-    pd.merge(HarPTI, HarPTIII, on="Cluster_ID")
-    .merge(Krause21, on="Cluster_ID")
-    .merge(vandenBerg_table2, on="Cluster_ID")
+    pd.merge(harI, harIII, on="Cluster_ID")
+    .merge(kr21, on="Cluster_ID")
+    .merge(vdb, on="Cluster_ID")
 )
 # works!
 
