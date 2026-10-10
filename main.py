@@ -53,22 +53,22 @@ DATASET = (
 ### This code here only does it for the van den Berg data. 
 vdb_fit = DATASET[["FeH_vandenBerg", "Age_vandenBerg"]].dropna().copy()
 # Generate a linear regression model - polynomial of degree 1
-slope, intercept = np.polyfit(vdb_fit["FeH_vandenBerg"], vdb_fit["Age_vandenBerg"], 1)
-print("Slope:", slope)
-print("Intercept:", intercept)
+slope_vdb, intercept_vdb = np.polyfit(vdb_fit["FeH_vandenBerg"], vdb_fit["Age_vandenBerg"], 1)
+print("Slope:", slope_vdb)
+print("Intercept:", intercept_vdb)
 # Create a new column for predicted age of each cluster based on the regression
-vdb_fit["Age_predicted"] = (intercept + slope * vdb_fit["FeH_vandenBerg"])
+vdb_fit["Age_predicted"] = (intercept_vdb + slope_vdb * vdb_fit["FeH_vandenBerg"])
 # Calculate the residuals, which is actual age minus predicted age
 vdb_fit["Residual"] = (vdb_fit["Age_vandenBerg"] - vdb_fit["Age_predicted"])
 
 ### This code here only does it for the Krause data. 
 kr21_fit = DATASET[["FeH_Krause", "Age_Krause"]].dropna().copy()
 # Generate a linear regression model - polynomial of degree 1
-slope, intercept = np.polyfit(kr21_fit["FeH_Krause"], kr21_fit["Age_Krause"], 1)
-print("Slope:", slope)
-print("Intercept:", intercept)
+slope_kr21, intercept_kr21 = np.polyfit(kr21_fit["FeH_Krause"], kr21_fit["Age_Krause"], 1)
+print("Slope:", slope_kr21)
+print("Intercept:", intercept_kr21)
 # Create a new column for predicted age of each cluster based on the regression
-kr21_fit["Age_predicted"] = (intercept + slope * kr21_fit["FeH_Krause"])
+kr21_fit["Age_predicted"] = (intercept_kr21 + slope_kr21 * kr21_fit["FeH_Krause"])
 # Calculate the residuals, which is actual age minus predicted age
 kr21_fit["Residual"] = (kr21_fit["Age_Krause"] - kr21_fit["Age_predicted"])
 
@@ -95,12 +95,12 @@ sns.scatterplot(
 
 # Plot the linear regression fit for van den Berg data
 x_line = np.sort(vdb_fit["FeH_vandenBerg"])
-y_line = intercept + slope * x_line
+y_line = intercept_vdb + slope_vdb * x_line
 ax.plot(x_line, y_line, color="blue", linestyle="--", label="van den Berg Linear Regression")
 
 # Plot the linear regression fit for Krause data
 x_line = np.sort(kr21_fit["FeH_Krause"])
-y_line = intercept + slope * x_line
+y_line = intercept_kr21 + slope_kr21 * x_line
 ax.plot(x_line, y_line, color="red", linestyle="--", label="Krause Linear Regression")
 
 ax.legend()
