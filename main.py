@@ -48,6 +48,32 @@ DATASET = (
 )
 
 
+### To investigate potential outliers, create a residuals plot for the Age vs FeH relationship. 
+### The code here creates a small dataset and a linear regression model. 
+### This code here only does it for the van den Berg data. 
+vdb_fit = DATASET[["FeH_vandenBerg", "Age_vandenBerg"]].dropna().copy()
+# Generate a linear regression model - polynomial of degree 1
+slope, intercept = np.polyfit(vdb_fit["FeH_vandenBerg"], vdb_fit["Age_vandenBerg"], 1)
+print("Slope:", slope)
+print("Intercept:", intercept)
+# Create a new column for predicted age of each cluster based on the regression
+vdb_fit["Age_predicted"] = (intercept + slope * vdb_fit["FeH_vandenBerg"])
+# Calculate the residuals, which is actual age minus predicted age
+vdb_fit["Residual"] = (vdb_fit["Age_vandenBerg"] - vdb_fit["Age_predicted"])
+
+### This code here only does it for the Krause data. 
+kr21_fit = DATASET[["FeH_Krause", "Age_Krause"]].dropna().copy()
+# Generate a linear regression model - polynomial of degree 1
+slope, intercept = np.polyfit(kr21_fit["FeH_Krause"], kr21_fit["Age_Krause"], 1)
+print("Slope:", slope)
+print("Intercept:", intercept)
+# Create a new column for predicted age of each cluster based on the regression
+kr21_fit["Age_predicted"] = (intercept + slope * kr21_fit["FeH_Krause"])
+# Calculate the residuals, which is actual age minus predicted age
+kr21_fit["Residual"] = (kr21_fit["Age_Krause"] - kr21_fit["Age_predicted"])
+
+
+
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(
@@ -66,6 +92,17 @@ ax.set(
 sns.scatterplot(
     data=DATASET, x="FeH_Krause", y="Age_Krause", color="red", label="Krause", ax=ax
 )
+
+# Plot the linear regression fit for van den Berg data
+x_line = np.sort(vdb_fit["FeH_vandenBerg"])
+y_line = intercept + slope * x_line
+ax.plot(x_line, y_line, color="blue", linestyle="--", label="van den Berg Linear Regression")
+
+# Plot the linear regression fit for Krause data
+x_line = np.sort(kr21_fit["FeH_Krause"])
+y_line = intercept + slope * x_line
+ax.plot(x_line, y_line, color="red", linestyle="--", label="Krause Linear Regression")
+
 ax.legend()
 plt.show()
 
@@ -103,4 +140,68 @@ ax.set(
     title="FeH Comparison between van den Berg and Krause Clusters",
 )
 ax.legend()
+plt.show()
+
+# Normalised residuals for van den Berg data
+n = len(vdb_fit)
+# Divide by n - 2 as there are two estimated parameters. This is a standard statistical method. 
+residual_sd = np.sqrt(np.sum(vdb_fit["Residual"] ** 2) / (n - 2))
+vdb_fit["Standardised_Residual"] = (vdb_fit["Residual"] / residual_sd)
+
+### Plot standardised residuals with threshold lines. 
+### Data points outside the orange lines are potential outliers. Points inside are unlikely to be outliers. 
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+
+sns.scatterplot(
+    data=vdb_fit,
+    x="Age_predicted",
+    y="Standardised_Residual",
+    color="blue",
+    ax=ax
+)
+
+ax.axhline(0, color="black", linestyle="--")
+ax.axhline(2, color="orange", linestyle=":")
+ax.axhline(-2, color="orange", linestyle=":")
+ax.axhline(3, color="red", linestyle=":")
+ax.axhline(-3, color="red", linestyle=":")
+
+ax.set(
+    xlabel="Predicted age (Gyr)",
+    ylabel="Standardised residual",
+    title="Standardised Residuals: van den Berg"
+)
+
+plt.show()
+
+# Normalised residuals for Krause data
+n = len(kr21_fit)
+# Divide by n - 2 as there are two estimated parameters. This is a standard statistical method. 
+residual_sd = np.sqrt(np.sum(kr21_fit["Residual"] ** 2) / (n - 2))
+kr21_fit["Standardised_Residual"] = (kr21_fit["Residual"] / residual_sd)
+
+### Plot standardised residuals with threshold lines. 
+### Data points outside the orange lines are potential outliers. Points inside are unlikely to be outliers. 
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+
+sns.scatterplot(
+    data=kr21_fit,
+    x="Age_predicted",
+    y="Standardised_Residual",
+    color="red",
+    ax=ax
+)
+
+ax.axhline(0, color="black", linestyle="--")
+ax.axhline(2, color="orange", linestyle=":")
+ax.axhline(-2, color="orange", linestyle=":")
+ax.axhline(3, color="red", linestyle=":")
+ax.axhline(-3, color="red", linestyle=":")
+
+ax.set(
+    xlabel="Predicted age (Gyr)",
+    ylabel="Standardised residual",
+    title="Standardised Residuals: Krause"
+)
+
 plt.show()
