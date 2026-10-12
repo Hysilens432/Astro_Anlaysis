@@ -81,13 +81,13 @@ sns.scatterplot(
     x="FeH_vandenBerg",
     y="Age_vandenBerg",
     color="blue",
-    label="Van den Bergh",
+    label="Van den Berg",
     ax=ax,
 )
 ax.set(
     xlabel="FeH",
     ylabel="Age (Gyr)",
-    title="Age vs FeH for Van den Bergh and Krause Clusters",
+    title="Age vs FeH for Van den Berg and Krause Clusters",
 )
 sns.scatterplot(
     data=DATASET, x="FeH_Krause", y="Age_Krause", color="red", label="Krause", ax=ax
@@ -147,33 +147,6 @@ n = len(vdb_fit)
 # Divide by n - 2 as there are two estimated parameters. This is a standard statistical method. 
 residual_sd = np.sqrt(np.sum(vdb_fit["Residual"] ** 2) / (n - 2))
 vdb_fit["Standardised_Residual"] = (vdb_fit["Residual"] / residual_sd)
-
-### Plot standardised residuals with threshold lines. 
-### Data points outside the orange lines are potential outliers. Points inside are unlikely to be outliers. 
-fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-
-sns.scatterplot(
-    data=vdb_fit,
-    x="Age_predicted",
-    y="Standardised_Residual",
-    color="blue",
-    ax=ax
-)
-
-ax.axhline(0, color="black", linestyle="--")
-ax.axhline(2, color="orange", linestyle=":")
-ax.axhline(-2, color="orange", linestyle=":")
-ax.axhline(3, color="red", linestyle=":")
-ax.axhline(-3, color="red", linestyle=":")
-
-ax.set(
-    xlabel="Predicted age (Gyr)",
-    ylabel="Standardised residual",
-    title="Standardised Residuals: van den Berg"
-)
-
-plt.show()
-
 # Normalised residuals for Krause data
 n = len(kr21_fit)
 # Divide by n - 2 as there are two estimated parameters. This is a standard statistical method. 
@@ -185,10 +158,20 @@ kr21_fit["Standardised_Residual"] = (kr21_fit["Residual"] / residual_sd)
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 
 sns.scatterplot(
+    data=vdb_fit,
+    x="Age_predicted",
+    y="Standardised_Residual",
+    color="blue",
+    label="van den Berg",
+    ax=ax
+)
+
+sns.scatterplot(
     data=kr21_fit,
     x="Age_predicted",
     y="Standardised_Residual",
     color="red",
+    label="Krause",
     ax=ax
 )
 
@@ -201,7 +184,86 @@ ax.axhline(-3, color="red", linestyle=":")
 ax.set(
     xlabel="Predicted age (Gyr)",
     ylabel="Standardised residual",
-    title="Standardised Residuals: Krause"
+    title="Standardised Residuals: van den Berg and Krause"
 )
 
+ax.legend()
+plt.show()
+
+# Radial velocity (v_LSR and v_r) - Galactic longitude
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+sns.scatterplot(
+    data=DATASET,
+    x="L",
+    y="v_LSR",
+    color="blue",
+    label="v_LSR",
+    ax=ax,
+)
+
+sns.scatterplot(
+    data=DATASET,
+    x="L",
+    y="v_r",
+    color="red",
+    label="v_r",
+    ax=ax,
+)
+
+ax.set(
+    xlabel="Galactic Longitude (deg)",
+    ylabel="Radial Velocity (km/s)",
+    title="Radial Velocity vs Galactic Longitude",
+)
+
+ax.legend()
+plt.show()
+
+# Radial velocity (v_LSR and v_r) - Galactocentric distance
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+sns.scatterplot(
+    data=DATASET,
+    x="R_gc",
+    y="v_LSR",
+    color="blue",
+    label="v_LSR",
+    ax=ax,
+)
+
+sns.scatterplot(
+    data=DATASET,
+    x="R_gc",
+    y="v_r",
+    color="red",
+    label="v_r",
+    ax=ax,
+)
+
+ax.set(
+    xlabel="Galactocentric Distance (kpc)",
+    ylabel="Radial Velocity (km/s)",
+    title="Radial Velocity vs Galactocentric Distance",
+)
+
+ax.legend()
+plt.show()
+
+# Velocity dispersion - Mass
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+sns.scatterplot(
+    data=DATASET,
+    x="Mstar",
+    y="sig_v",
+    color="blue",
+    #label="Velocity Dispersion",
+    ax=ax,
+)
+
+ax.set(
+    xlabel="Mass (M_sun)",
+    ylabel="Velocity Dispersion (km/s)",
+    title="Velocity Dispersion vs Mass",
+)
+
+#ax.legend()
 plt.show()
