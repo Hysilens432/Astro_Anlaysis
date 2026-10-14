@@ -267,3 +267,90 @@ ax.set(
 
 #ax.legend()
 plt.show()
+
+# FeH - Galactocentric distance
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+sns.scatterplot(
+    data=DATASET,
+    x="R_gc",
+    y="FeH_vandenBerg",
+    color="blue",
+    label="van den Berg",
+    ax=ax,
+)
+
+sns.scatterplot(
+    data=DATASET,
+    x="R_gc",
+    y="FeH_Krause",
+    color="red",
+    label="Krause",
+    ax=ax,
+)
+
+ax.set(
+    xlabel="Galactocentric Distance (kpc)",
+    ylabel="[Fe/H]",
+    title="[Fe/H] vs Galactocentric Distance",
+)
+
+ax.legend()
+plt.show()
+
+
+### TEST ###
+# Plot of Age vs FeH for only Krause to identify two branches
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+# Plot with color representing Galactocentric distance as a nice way to visualize the data.
+scatter = ax.scatter(
+    data=DATASET,
+    x="FeH_Krause",
+    y="Age_Krause",
+    c="R_gc",             # Color by distance
+    cmap="flare",         # A nice sequential palette (darker/warmer = further out)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+    label="Krause Clusters"
+)
+# Add a colourbar to guide the reader on what the point colors mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
+
+ax.set(
+    xlabel="Metallicity [Fe/H]",
+    ylabel="Age (Gyr)",
+    title="Krause Age-Metallicity Relation with Galactocentric Distance",
+    #ylim=(7, 15)  # Constrain Y-axis to focus tightly on the clusters
+)
+
+ax.legend()
+plt.show()
+
+# Plot of Age vs FeH for only van den Berg to identify two branches
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+# Plot with color representing Galactocentric distance as a nice way to visualize the data.
+scatter = ax.scatter(
+    data=DATASET,
+    x="FeH_vandenBerg",
+    y="Age_vandenBerg",
+    c="R_gc",             # Color by distance
+    cmap="flare",         # A nice sequential palette (darker/warmer = further out)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+    label="van den Berg Clusters"
+)
+# Add a colourbar to guide the reader on what the point colors mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
+
+ax.set(
+    xlabel="Metallicity [Fe/H]",
+    ylabel="Age (Gyr)",
+    title="van den Berg Age-Metallicity Relation with Galactocentric Distance",
+    #ylim=(7, 15)  # Constrain Y-axis to focus tightly on the clusters
+)
+
+ax.legend()
+plt.show()
