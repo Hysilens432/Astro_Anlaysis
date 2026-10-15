@@ -73,7 +73,7 @@ kr21_fit["Age_predicted"] = (intercept_kr21 + slope_kr21 * kr21_fit["FeH_Krause"
 kr21_fit["Residual"] = (kr21_fit["Age_Krause"] - kr21_fit["Age_predicted"])
 
 
-
+'''
 # Age - FeH plot for Vandenberg and Krause datasets
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(
@@ -105,7 +105,8 @@ ax.plot(x_line, y_line, color="red", linestyle="--", label="Krause Linear Regres
 
 ax.legend()
 plt.show()
-
+'''
+'''
 # Plot systematic differences between the age measurements
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(data=DATASET, x="Age_vandenBerg", y="Age_Krause", color="blue", ax=ax)
@@ -141,6 +142,7 @@ ax.set(
 )
 ax.legend()
 plt.show()
+'''
 
 # Normalised residuals for van den Berg data
 n = len(vdb_fit)
@@ -189,7 +191,7 @@ ax.set(
 
 ax.legend()
 plt.show()
-
+'''
 # Radial velocity (v_LSR and v_r) - Galactic longitude
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 sns.scatterplot(
@@ -247,6 +249,7 @@ ax.set(
 
 ax.legend()
 plt.show()
+'''
 
 # Velocity dispersion - Mass. Added colour coding with half light radius. 
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
@@ -405,3 +408,41 @@ ax.set(
 
 ax.legend()
 plt.show()
+
+#### Identify potential acretted clusters ####
+# These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters. 
+
+# Velocity  dispersion - Mass relation plot. Specifically, these have very high velocity dispersions for their mass, 
+diffuse_candidates = DATASET[(DATASET["sig_v"] > 10)]
+print("Potentially accreted clusters based on velocity dispersion and mass:")
+print(diffuse_candidates[["Cluster_ID", "sig_v", "Mstar"]])
+
+# Metallicity - Galactocentric distance plot. Specifically, these are metal-rich clusters that are far from the galactic center.
+metallicity_candidates = DATASET[(DATASET["FeH_Krause"] > -1.3) & (DATASET["R_gc"] > 15)]
+print("Potentially accreted clusters based on metallicity and galactocentric distance:")
+print(metallicity_candidates[["Cluster_ID", "FeH_Krause", "R_gc"]])
+
+# Age - Metallicity plot for Krause data. These follow the lower track on the plot. 
+age_metallicity_candidates = DATASET[(DATASET["Age_Krause"] < 12)]
+print("Potentially accreted clusters based on age and metallicity:")
+print(age_metallicity_candidates[["Cluster_ID", "Age_Krause", "FeH_Krause"]])
+
+# Radial velocity - Galactocentric distance plot. These are clusters with high radial velocities that are far from the galactic center.
+radial_velocity_candidates = DATASET[(DATASET["v_LSR"] > 300) | (DATASET["v_LSR"] < -300)]
+print("Potentially accreted clusters based on radial velocity and galactocentric distance:")
+print(radial_velocity_candidates[["Cluster_ID", "v_LSR", "R_gc"]])
+
+# Identify clusters that appear at least twice in the above lists. 
+all_candidates = pd.concat(
+    [   diffuse_candidates[["Cluster_ID"]],
+        metallicity_candidates[["Cluster_ID"]], 
+        age_metallicity_candidates[["Cluster_ID"]],
+        radial_velocity_candidates[["Cluster_ID"]]
+    ]
+)
+
+id_counts = all_candidates["Cluster_ID"].value_counts()
+repeated_candidates = id_counts[id_counts > 1].index
+shortlist = DATASET[DATASET["Cluster_ID"].isin(repeated_candidates)]
+print("Clusters that appear in at least two of the above criteria:")
+print(shortlist[["Cluster_ID", "sig_v", "Mstar", "FeH_Krause", "R_gc", "Age_Krause", "v_LSR"]])
