@@ -248,57 +248,81 @@ ax.set(
 ax.legend()
 plt.show()
 
-# Velocity dispersion - Mass
+# Velocity dispersion - Mass. Added colour coding with half light radius. 
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-sns.scatterplot(
+scatter = ax.scatter(
     data=DATASET,
     x="Mstar",
     y="sig_v",
-    color="blue",
-    #label="Velocity Dispersion",
-    ax=ax,
+    c="r_h",             # Color by distance
+    cmap="flare",               # A nice sequential palette (darker/warmer = further out)
+    s=50,                       # Size of points
+    edgecolor="w",
+    alpha=0.85,
 )
 
+# Add a colourbar to guide the reader on what the point colours mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Half light radius (pc)", rotation=270, labelpad=15)
+
+# Apply a Log Scale to the Mass axis to make the plot more readable. The mass values vary over several orders of magnitude, so a log scale is appropriate.
+ax.set_xscale('log')
+
 ax.set(
-    xlabel="Mass (M_sun)",
+    xlabel="log(Mass) (log(M_sun))",
     ylabel="Velocity Dispersion (km/s)",
-    title="Velocity Dispersion vs Mass",
+    title="Velocity Dispersion-Mass Relation with Half Light Radius",
 )
 
 #ax.legend()
 plt.show()
 
+### TEST ###
+
 # FeH - Galactocentric distance
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-sns.scatterplot(
+'''
+scatter = ax.scatter(
     data=DATASET,
     x="R_gc",
     y="FeH_vandenBerg",
-    color="blue",
+    marker="o",
     label="van den Berg",
-    ax=ax,
+    c="Age_vandenBerg",             # Color by distance
+    cmap="flare",         # A nice sequential palette (darker/warmer = further out)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
 )
+'''
 
-sns.scatterplot(
+scatter = ax.scatter(
     data=DATASET,
     x="R_gc",
     y="FeH_Krause",
-    color="red",
+    #marker="*",
     label="Krause",
-    ax=ax,
+    c="Age_Krause",             # Color by distance
+    cmap="flare",               # A nice sequential palette (darker/warmer = further out)
+    s=50,                       # Size of points
+    edgecolor="w",
+    alpha=0.85,
 )
+
+# Add a colourbar to guide the reader on what the point colours mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Age (Gyr)", rotation=270, labelpad=15)
 
 ax.set(
     xlabel="Galactocentric Distance (kpc)",
-    ylabel="[Fe/H]",
-    title="[Fe/H] vs Galactocentric Distance",
+    ylabel=" Metallcity [Fe/H]",
+    title="Metallicity-Galactocentric Distance with Age for van den Berg and Krause Clusters",
 )
 
 ax.legend()
 plt.show()
 
 
-### TEST ###
 # Plot of Age vs FeH for only Krause to identify two branches
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 # Plot with color representing Galactocentric distance as a nice way to visualize the data.
@@ -348,6 +372,35 @@ ax.set(
     xlabel="Metallicity [Fe/H]",
     ylabel="Age (Gyr)",
     title="van den Berg Age-Metallicity Relation with Galactocentric Distance",
+)
+
+ax.legend()
+plt.show()
+
+
+# Plot of velocity vs galactocentric distance and colour coded with krause metallicities
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+# Plot with color representing metallicity as a nice way to visualize the data.
+scatter = ax.scatter(
+    data=DATASET,
+    x="R_gc",
+    y="v_LSR",
+    c="FeH_Krause",       # Color by metallicity
+    cmap="viridis",       # A nice sequential palette (darker/warmer = more metal-rich)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+    label="Krause Clusters"
+)
+
+# Add a colourbar to guide the reader on what the point colours mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Metallicity [Fe/H]", rotation=270, labelpad=15)
+
+ax.set(
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Radial Velocity $v_{LSR}$ (km/s)",
+    title="Radial Velocity vs Galactocentric Distance with Krause Metallicity",
 )
 
 ax.legend()
