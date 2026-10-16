@@ -257,7 +257,7 @@ scatter = ax.scatter(
     data=DATASET,
     x="Mstar",
     y="sig_v",
-    c="r_h",             # Color by distance
+    c="r_h",             # Color by half light radius
     cmap="flare",               # A nice sequential palette (darker/warmer = further out)
     s=50,                       # Size of points
     edgecolor="w",
@@ -282,7 +282,7 @@ plt.show()
 
 ### TEST ###
 
-# FeH - Galactocentric distance
+# FeH - Galactocentric distance, coloured by age. 
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 '''
 scatter = ax.scatter(
@@ -291,7 +291,7 @@ scatter = ax.scatter(
     y="FeH_vandenBerg",
     marker="o",
     label="van den Berg",
-    c="Age_vandenBerg",             # Color by distance
+    c="Age_vandenBerg",             # Color by age
     cmap="flare",         # A nice sequential palette (darker/warmer = further out)
     s=50,                 # Size of points
     edgecolor="w",
@@ -305,7 +305,7 @@ scatter = ax.scatter(
     y="FeH_Krause",
     #marker="*",
     label="Krause",
-    c="Age_Krause",             # Color by distance
+    c="Age_Krause",             # Color by age
     cmap="flare",               # A nice sequential palette (darker/warmer = further out)
     s=50,                       # Size of points
     edgecolor="w",
@@ -326,7 +326,7 @@ ax.legend()
 plt.show()
 
 
-# Plot of Age vs FeH for only Krause to identify two branches
+# Plot of Age vs FeH for only Krause to identify two branches. Coloured by Galactocentric distance.
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 # Plot with color representing Galactocentric distance as a nice way to visualize the data.
 scatter = ax.scatter(
@@ -353,7 +353,7 @@ ax.set(
 ax.legend()
 plt.show()
 
-# Plot of Age vs FeH for only van den Berg to identify two branches
+# Plot of Age vs FeH for only van den Berg to identify two branches. Coloured by Galactocentric distance.
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 # Plot with color representing Galactocentric distance as a nice way to visualize the data.
 scatter = ax.scatter(
@@ -389,7 +389,7 @@ scatter = ax.scatter(
     x="R_gc",
     y="v_LSR",
     c="FeH_Krause",       # Color by metallicity
-    cmap="viridis",       # A nice sequential palette (darker/warmer = more metal-rich)
+    cmap="viridis",         # A nice sequential palette (darker/warmer = more metal-rich)
     s=50,                 # Size of points
     edgecolor="w",
     alpha=0.85,
@@ -408,6 +408,64 @@ ax.set(
 
 ax.legend()
 plt.show()
+
+# Half light radius vs galactocentric distance and colour coded with krause metallicities
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+# Plot with color representing metallicity as a nice way to visualize the data.
+scatter = ax.scatter(
+    data=DATASET,
+    x="R_gc",
+    y="r_h",
+    c="FeH_Krause",       # Color by metallicity
+    cmap="viridis",         # A nice sequential palette (darker/warmer = more metal-rich)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+    label="Krause Clusters"
+)
+
+# Add a colourbar to guide the reader on what the point colours mean
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Metallicity [Fe/H]", rotation=270, labelpad=15)
+
+ax.set(
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Half Light Radius $r_h$ (pc)",
+    title="Half Light Radius vs Galactocentric Distance with Krause Metallicity",
+)
+
+ax.legend()
+plt.show()
+
+
+# Core relaxation time against galactocentric distance, coloured by Krause age. 
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+scatter = ax.scatter(
+    data=DATASET,
+    x="R_gc",
+    y="lg_tc",
+    c="Age_Krause",       # Color by age
+    cmap="viridis",         # A nice sequential palette (darker/warmer = older)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+)
+
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Age (Gyr)", rotation=270, labelpad=15)
+
+ax.set(
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Log(Core Relaxation Time) $log(t_c)$ (yr)",
+    title="Core Relaxation Time vs Galactocentric Distance with Krause Age",
+)
+
+plt.show()
+
+
+
+
+
 
 #### Identify potential acretted clusters ####
 # These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters. 
