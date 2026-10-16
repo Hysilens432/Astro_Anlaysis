@@ -462,9 +462,69 @@ ax.set(
 
 plt.show()
 
+# Velocity against metallcity, coloured by galactocentric distance. 
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+scatter = ax.scatter(
+    data=DATASET,
+    x="FeH_Krause",
+    y="v_LSR",
+    c="R_gc",       # Color by galactocentric distance
+    cmap="viridis",         # A nice sequential palette (darker/warmer = further out)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+)
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
+ax.set(
+    xlabel="Metallicity [Fe/H]",
+    ylabel="Radial Velocity $v_{LSR}$ (km/s)",
+    title="Radial Velocity vs Metallicity with Galactocentric Distance",
+)
 
+plt.show()
 
+# Central concentration against velocity dispersion, coloured by core radius. 
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+scatter = ax.scatter(
+    data=DATASET,
+    x="sig_v",
+    y="c",
+    c="FeH_Krause",       # Color by metallicity
+    cmap="viridis",         # A nice sequential palette (darker/warmer = higher metallicity)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+)
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Metallicity [Fe/H]", rotation=270, labelpad=15)
+ax.set(
+    xlabel="Velocity Dispersion $\\sigma_v$ (km/s)",
+    ylabel="Central Concentration $c$",
+    title="Central Concentration vs Velocity Dispersion with Metallicity",
+)
+plt.show()
 
+# Relaxation time against metallcity, coloured by galactocentric distance.
+fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+scatter = ax.scatter(
+    data=DATASET,
+    x="FeH_Krause",
+    y="lg_tc",
+    c="R_gc",       # Color by galactocentric distance
+    cmap="viridis",         # A nice sequential palette (darker/warmer = further out)
+    s=50,                 # Size of points
+    edgecolor="w",
+    alpha=0.85,
+)
+cbar = fig.colorbar(scatter, ax=ax)
+cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
+ax.set(
+    xlabel="Metallicity [Fe/H]",
+    ylabel="Log(Core Relaxation Time) $log(t_c)$ (yr)",
+    title="Core Relaxation Time vs Metallicity with Galactocentric Distance",
+)
+plt.show()
 
 
 #### Identify potential acretted clusters ####
