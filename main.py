@@ -1,7 +1,6 @@
 """
 
-Main file for implementing data analysis on given datasets.
-Script only (So far)
+For PHYS3116 Computational Assessment
 """
 
 # Import necessary libraries
