@@ -6,10 +6,52 @@ import os
 import pandas as pd
 import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 """
 PLOT HELPER FUNCTIONS 
 """
+
+
+def plot_scatter(
+    dataset,
+    *,
+    x,
+    y,
+    color,
+    colorbar_label,
+    xlabel,
+    ylabel,
+    title,
+    filename,
+    label,
+    xscale,
+    PLOT_WIDTH,
+    PLOT_HEIGHT
+):
+    fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+    scatter = ax.scatter(
+        data=dataset,
+        x=x,
+        y=y,
+        c=color,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        title=title,
+        xscale=xscale,
+        cmap="flare",
+        s=50,
+        edgecolor="w",
+        alpha=0.85,
+        label=xlabel + " vs " + ylabel,
+    )
+    colorbar = fig.colorbar(scatter, ax=ax)
+    colorbar.set_label(colorbar_label, rotation=270, labelpad=15)
+
+    output_path = Path("./output") / filename
+    fig.savefig(output_path)
+    plt.close(fig)
 
 
 """

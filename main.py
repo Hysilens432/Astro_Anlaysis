@@ -88,35 +88,20 @@ residual_sd = np.sqrt(np.sum(kr21_fit["Residual"] ** 2) / (n - 2))
 kr21_fit["Standardised_Residual"] = kr21_fit["Residual"] / residual_sd
 
 # Velocity dispersion - Mass. Added colour coding with half light radius.
-fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-scatter = ax.scatter(
-    data=DATASET,
+tc.plot_scatter(
+    dataset=DATASET,
     x="Mstar",
     y="sig_v",
-    c="r_h",  # Color by half light radius
-    cmap="flare",  # A nice sequential palette (darker/warmer = further out)
-    s=50,  # Size of points
-    edgecolor="w",
-    alpha=0.85,
-)
-
-# Add a colourbar to guide the reader on what the point colours mean
-cbar = fig.colorbar(scatter, ax=ax)
-cbar.set_label("Half light radius (pc)", rotation=270, labelpad=15)
-
-# Apply a Log Scale to the Mass axis to make the plot more readable. The mass values vary over several orders of magnitude, so a log scale is appropriate.
-ax.set_xscale("log")
-
-ax.set(
+    color="r_h",
+    colorbar_label="Half light radius (pc)",
     xlabel="log(Mass) (log(M_sun))",
     ylabel="Velocity Dispersion (km/s)",
     title="Velocity Dispersion-Mass Relation with Half Light Radius",
+    filename="sigv_mass.png",
+    xscale="log",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
 )
-
-# ax.legend()
-plt.savefig("./output/sigv_mass.png")
-
-### TEST ###
 
 # FeH - Galactocentric distance, coloured by age.
 fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
