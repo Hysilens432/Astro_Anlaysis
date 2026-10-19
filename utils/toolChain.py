@@ -25,7 +25,6 @@ def plot_scatter(
     ylabel,
     title,
     filename,
-    label,
     xscale,
     PLOT_WIDTH,
     PLOT_HEIGHT
@@ -44,7 +43,6 @@ def plot_scatter(
         s=50,
         edgecolor="w",
         alpha=0.85,
-        label=xlabel + " vs " + ylabel,
     )
     colorbar = fig.colorbar(scatter, ax=ax)
     colorbar.set_label(colorbar_label, rotation=270, labelpad=15)
