@@ -35,10 +35,6 @@ def plot_scatter(
         x=x,
         y=y,
         c=color,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        title=title,
-        xscale=xscale,
         cmap="flare",
         s=50,
         edgecolor="w",
@@ -46,6 +42,12 @@ def plot_scatter(
     )
     colorbar = fig.colorbar(scatter, ax=ax)
     colorbar.set_label(colorbar_label, rotation=270, labelpad=15)
+    ax.set(
+        xlabel=xlabel,
+        ylabel=ylabel,
+        title=title,
+        xscale=xscale,
+    )
 
     output_path = Path("./output") / filename
     fig.savefig(output_path)

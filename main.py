@@ -97,7 +97,7 @@ tc.plot_scatter(
     xlabel="log(Mass) (log(M_sun))",
     ylabel="Velocity Dispersion (km/s)",
     title="Velocity Dispersion-Mass Relation with Half Light Radius",
-    filename="sigv_mass.png",
+    filename="mstar_v_sigv.png",
     xscale="log",
     PLOT_WIDTH=PLOT_WIDTH,
     PLOT_HEIGHT=PLOT_HEIGHT,
