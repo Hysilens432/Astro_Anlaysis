@@ -23,6 +23,7 @@ def plot_scatter(
     colorbar_label,
     xlabel,
     ylabel,
+    label=None,
     title,
     filename,
     xscale,

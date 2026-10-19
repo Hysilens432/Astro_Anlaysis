@@ -104,88 +104,52 @@ tc.plot_scatter(
 )
 
 # FeH - Galactocentric distance, coloured by age.
-fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-
-scatter = ax.scatter(
-    data=DATASET,
+tc.plot_scatter(
+    dataset=DATASET,
     x="R_gc",
     y="FeH_Krause",
-    # marker="*",
-    label="Krause",
-    c="Age_Krause",  # Color by age
-    cmap="flare",  # A nice sequential palette (darker/warmer = further out)
-    s=50,  # Size of points
-    edgecolor="w",
-    alpha=0.85,
-)
-
-# Add a colourbar to guide the reader on what the point colours mean
-cbar = fig.colorbar(scatter, ax=ax)
-cbar.set_label("Age (Gyr)", rotation=270, labelpad=15)
-
-ax.set(
+    color="Age_Krause",
+    colorbar_label="Age (Gyr)",
     xlabel="Galactocentric Distance (kpc)",
-    ylabel=" Metallcity [Fe/H]",
-    title="Metallicity-Galactocentric Distance with Age for van den Berg and Krause Clusters",
+    ylabel="Metallicity [Fe/H]",
+    title="Metallicity-Galactocentric Distance with Age for Krause Clusters",
+    filename="feh_rgc_age.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
 )
-
-ax.legend()
-plt.savefig("./output/feh_rgc_age.png")
-
 
 # Plot of Age vs FeH for only Krause to identify two branches. Coloured by Galactocentric distance.
-fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
 # Plot with color representing Galactocentric distance as a nice way to visualize the data.
-scatter = ax.scatter(
-    data=DATASET,
+tc.plot_scatter(
+    dataset=DATASET,
     x="FeH_Krause",
     y="Age_Krause",
-    c="R_gc",  # Color by distance
-    cmap="flare",  # A nice sequential palette (darker/warmer = further out)
-    s=50,  # Size of points
-    edgecolor="w",
-    alpha=0.85,
+    color="R_gc",
+    colorbar_label="Galactocentric Distance $R_{gc}$ (kpc)",
     label="Krause Clusters",
-)
-# Add a colourbar to guide the reader on what the point colours mean
-cbar = fig.colorbar(scatter, ax=ax)
-cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
-
-ax.set(
-    xlabel="Metallicity [Fe/H]",
-    ylabel="Age (Gyr)",
-    title="Krause Age-Metallicity Relation with Galactocentric Distance",
+    filename="krause_age_feh.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
 )
 
-ax.legend()
-plt.savefig("./output/krause_age_feh.png")
 
-# Plot of Age vs FeH for only van den Berg to identify two branches. Coloured by Galactocentric distance.
-fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
-# Plot with color representing Galactocentric distance as a nice way to visualize the data.
-scatter = ax.scatter(
-    data=DATASET,
+# Plot of Age vs FeH for only van den Berg to identify two branches. Coloured by Galactocentric distance.rg Clusters",
+tc.plot_scatter(
+    dataset=DATASET,
     x="FeH_vandenBerg",
     y="Age_vandenBerg",
-    c="R_gc",  # Color by distance
-    cmap="flare",  # A nice sequential palette (darker/warmer = further out)
-    s=50,  # Size of points
-    edgecolor="w",
-    alpha=0.85,
-    label="van den Berg Clusters",
-)
-# Add a colourbar to guide the reader on what the point colours mean
-cbar = fig.colorbar(scatter, ax=ax)
-cbar.set_label("Galactocentric Distance $R_{gc}$ (kpc)", rotation=270, labelpad=15)
-
-ax.set(
+    color="R_gc",
+    colorbar_label="Galactocentric Distance $R_{gc}$ (kpc)",
     xlabel="Metallicity [Fe/H]",
     ylabel="Age (Gyr)",
     title="van den Berg Age-Metallicity Relation with Galactocentric Distance",
+    filename="vandenberg_age_feh.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
 )
-
-ax.legend()
-plt.savefig("./output/vandenberg_age_feh.png")
 
 
 #### Identify potential acretted clusters ####
