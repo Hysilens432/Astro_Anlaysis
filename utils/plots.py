@@ -1,11 +1,14 @@
+from networkx import dispersion
+
 import utils.toolChain as tc
+import numpy as np
 
 
-def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
+def run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Velocity dispersion - Mass. Added colour coding with half light radius.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="Mstar",
         y="sig_v",
         color="r_h",
@@ -21,7 +24,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # FeH - Galactocentric distance, coloured by age.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="R_gc",
         y="FeH_Krause",
         color="Age_Krause",
@@ -38,7 +41,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
     # Plot of Age vs FeH for only Krause to identify two branches. Coloured by Galactocentric distance.
     # Plot with color representing Galactocentric distance as a nice way to visualize the data.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="FeH_Krause",
         y="Age_Krause",
         color="R_gc",
@@ -55,7 +58,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Plot of Age vs FeH for only van den Berg to identify two branches. Coloured by Galactocentric distance.rg Clusters",
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="FeH_vandenBerg",
         y="Age_vandenBerg",
         color="R_gc",
@@ -71,7 +74,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Radial velocity LSR vs Galactocentric distance coloured by Krause metallicities.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="R_gc",
         y="v_LSR",
         color="FeH_Krause",
@@ -87,7 +90,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Half light radius vs galactocentric distance coloured by krause metallicities.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="R_gc",
         y="r_h",
         color="FeH_Krause",
@@ -103,7 +106,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Core relaxation time vs galactocentric distance coloured by krause age.
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="R_gc",
         y="lg_tc",
         color="Age_Krause",
@@ -119,7 +122,7 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
 
     # Concentration vs velocity dispersion coloured by krause metallicities
     tc.plot_scatter(
-        dataset=DATASET,
+        dataset=dataset,
         x="c",
         y="sig_v",
         color="FeH_Krause",
@@ -132,3 +135,9 @@ def run_plots(DATASET, PLOT_WIDTH, PLOT_HEIGHT):
         PLOT_WIDTH=PLOT_WIDTH,
         PLOT_HEIGHT=PLOT_HEIGHT,
     )
+
+    # Harris S0.5
+    radial_velocity = "v_r"
+    dispersion = "sig_v"
+    tc.compute_s0_5(dataset, radial_velocity, dispersion)
+    print(dataset["S_0.5"])

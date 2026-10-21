@@ -40,8 +40,8 @@ kr21 = kr21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
 print(vdb.head())
 print(kr21.head())
 
-# Note: I simplified merge here. DATASET should be constant unless wee wanna change it.
-DATASET = (
+# Note: I simplified merge here. dataset should be constant unless wee wanna change it.
+dataset = (
     pd.merge(harI, harIII, on="Cluster_ID")
     .merge(kr21, on="Cluster_ID")
     .merge(vdb, on="Cluster_ID")
@@ -51,7 +51,7 @@ DATASET = (
 ### To investigate potential outliers, create a residuals plot for the Age vs FeH relationship.
 ### The code here creates a small dataset and a linear regression model.
 ### This code here only does it for the van den Berg data.
-vdb_fit = DATASET[["FeH_vandenBerg", "Age_vandenBerg"]].dropna().copy()
+vdb_fit = dataset[["FeH_vandenBerg", "Age_vandenBerg"]].dropna().copy()
 # Generate a linear regression model - polynomial of degree 1
 slope_vdb, intercept_vdb = np.polyfit(
     vdb_fit["FeH_vandenBerg"], vdb_fit["Age_vandenBerg"], 1
@@ -64,7 +64,7 @@ vdb_fit["Age_predicted"] = intercept_vdb + slope_vdb * vdb_fit["FeH_vandenBerg"]
 vdb_fit["Residual"] = vdb_fit["Age_vandenBerg"] - vdb_fit["Age_predicted"]
 
 ### This code here only does it for the Krause data.
-kr21_fit = DATASET[["FeH_Krause", "Age_Krause"]].dropna().copy()
+kr21_fit = dataset[["FeH_Krause", "Age_Krause"]].dropna().copy()
 # Generate a linear regression model - polynomial of degree 1
 slope_kr21, intercept_kr21 = np.polyfit(
     kr21_fit["FeH_Krause"], kr21_fit["Age_Krause"], 1
@@ -88,31 +88,31 @@ n = len(kr21_fit)
 residual_sd = np.sqrt(np.sum(kr21_fit["Residual"] ** 2) / (n - 2))
 kr21_fit["Standardised_Residual"] = kr21_fit["Residual"] / residual_sd
 
-plots.run_plots(DATASET, PLOT_WIDTH=10, PLOT_HEIGHT=8)
+plots.run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT)
 
 #### Identify potential acretted clusters ####
 # These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters.
 
 # Velocity  dispersion - Mass relation plot. Specifically, these have very high velocity dispersions for their mass,
-diffuse_candidates = DATASET[(DATASET["sig_v"] > 10)]
+diffuse_candidates = dataset[(dataset["sig_v"] > 10)]
 print("Potentially accreted clusters based on velocity dispersion and mass:")
 print(diffuse_candidates[["Cluster_ID", "sig_v", "Mstar"]])
 
 # Metallicity - Galactocentric distance plot. Specifically, these are metal-rich clusters that are far from the galactic center.
-metallicity_candidates = DATASET[
-    (DATASET["FeH_Krause"] > -1.3) & (DATASET["R_gc"] > 15)
+metallicity_candidates = dataset[
+    (dataset["FeH_Krause"] > -1.3) & (dataset["R_gc"] > 15)
 ]
 print("Potentially accreted clusters based on metallicity and galactocentric distance:")
 print(metallicity_candidates[["Cluster_ID", "FeH_Krause", "R_gc"]])
 
 # Age - Metallicity plot for Krause data. These follow the lower track on the plot.
-age_metallicity_candidates = DATASET[(DATASET["Age_Krause"] < 12)]
+age_metallicity_candidates = dataset[(dataset["Age_Krause"] < 12)]
 print("Potentially accreted clusters based on age and metallicity:")
 print(age_metallicity_candidates[["Cluster_ID", "Age_Krause", "FeH_Krause"]])
 
 # Radial velocity - Galactocentric distance plot. These are clusters with high radial velocities that are far from the galactic center.
-radial_velocity_candidates = DATASET[
-    (DATASET["v_LSR"] > 300) | (DATASET["v_LSR"] < -300)
+radial_velocity_candidates = dataset[
+    (dataset["v_LSR"] > 300) | (dataset["v_LSR"] < -300)
 ]
 print(
     "Potentially accreted clusters based on radial velocity and galactocentric distance:"
@@ -131,7 +131,7 @@ all_candidates = pd.concat(
 
 id_counts = all_candidates["Cluster_ID"].value_counts()
 repeated_candidates = id_counts[id_counts > 1].index
-shortlist = DATASET[DATASET["Cluster_ID"].isin(repeated_candidates)]
+shortlist = dataset[dataset["Cluster_ID"].isin(repeated_candidates)]
 print("Clusters that appear in at least two of the above criteria:")
 print(
     shortlist[
