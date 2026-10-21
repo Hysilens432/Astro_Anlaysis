@@ -70,15 +70,3 @@ def csv_import(path):
     elif not os.path.exists(path):
         raise ValueError("The file path does not exist")
     return pd.read_csv(path)
-
-
-def compute_s0_5(
-    dataset,
-    radial_velocity,
-    dispersion,
-):
-    # Sk morphological parameter
-    dataset["S_0.5"] = np.sqrt(
-        0.5 * np.square(np.abs(dataset[radial_velocity]).fillna(0))
-        + np.square(np.abs(dataset[dispersion].fillna(0)))
-    )
