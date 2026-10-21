@@ -154,6 +154,37 @@ tc.plot_scatter(
     PLOT_HEIGHT=PLOT_HEIGHT,
 )
 
+# Radial velocity LSR vs Galactocentric distance coloured by Krause metallicities.
+tc.plot_scatter(
+    dataset=DATASET,
+    x="R_gc",
+    y="v_LSR",
+    color="FeH_Krause",
+    colorbar_label="Metallicity [Fe/H]",
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Radial Velocity $v_{LSR}$ (km/s)",
+    title="Radial Velocity vs Galactocentric Distance with Krause Metallicity",
+    filename="rv_vs_rgc.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
+)
+
+# Half light radius vs galactocentric distance coloured by krause metallicities.
+tc.plot_scatter(
+    dataset=DATASET,
+    x="R_gc",
+    y="r_h",
+    color="FeH_Krause",
+    colorbar_label="Metallicity [Fe/H]",
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Half Light Radius $r_h$ (pc)",
+    title="Half Light Radius vs Galactocentric Distance with Krause Metallicity",
+    filename="rh_vs_rgc.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
+)
 
 #### Identify potential acretted clusters ####
 # These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters.
