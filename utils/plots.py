@@ -140,7 +140,32 @@ def run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT):
         PLOT_HEIGHT=PLOT_HEIGHT,
     )
 
-    # Harris S0.5
-    radial_velocity = "v_r"
-    dispersion = "sig_v"
-    tc.compute_s0_5(dataset, radial_velocity, dispersion)
+    # Faber-Jackson style relation: Mstar vs sig_v
+
+    # ok so the dispersion is kinda low
+
+    # observe high deviation, potentially bc its not a galaxy
+    fj = dataset[["Mstar", "sig_v"]].dropna().copy()
+
+    fj["logM"] = np.log10(fj["Mstar"] * 1e5)
+    slope, intercept = np.polyfit(np.log10(fj["sig_v"]), fj["logM"], 1)
+
+    sig_grid = np.linspace(fj["sig_v"].min(), fj["sig_v"].max(), 1000)
+
+    fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+
+    sns.scatterplot(data=fj, x="sig_v", y="logM", s=50, edgecolor="w", ax=ax)
+    ax.plot(
+        sig_grid,
+        slope * np.log10(sig_grid) + intercept,
+        color="k",
+    )
+    ax.set(
+        xlabel="Velocity Dispersion $\\sigma_v$ (km/s)",
+        ylabel="$\\log_{10}(M_\\star / M_\\odot)$",
+        title="Faber-Jackson Relation",
+        xscale="log",
+    )
+    ax.legend()
+    fig.savefig(Path("./output") / "faber_jackson.png")
+    plt.close(fig)
