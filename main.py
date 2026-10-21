@@ -186,6 +186,38 @@ tc.plot_scatter(
     PLOT_HEIGHT=PLOT_HEIGHT,
 )
 
+# Core relaxation time vs galactocentric distance coloured by krause age.
+tc.plot_scatter(
+    dataset=DATASET,
+    x="R_gc",
+    y="lg_tc",
+    color="Age_Krause",
+    colorbar_label="Age (Gyr)",
+    xlabel="Galactocentric Distance $R_{gc}$ (kpc)",
+    ylabel="Core Relaxation Time $lg_{tc}$",
+    title="Core Relaxation Time vs Galactocentric Distance with Krause Age",
+    filename="trc_vs_rgc.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
+)
+
+# Concentration vs velocity dispersion coloured by krause metallicities
+tc.plot_scatter(
+    dataset=DATASET,
+    x="c",
+    y="sig_v",
+    color="FeH_Krause",
+    colorbar_label="Metallicity [Fe/H]",
+    xlabel="Concentration $c$",
+    ylabel="Velocity Dispersion $\sigma_v$ (km/s)",
+    title="Concentration vs Velocity Dispersion with Krause Metallicity",
+    filename="c_vs_sigv.png",
+    xscale="linear",
+    PLOT_WIDTH=PLOT_WIDTH,
+    PLOT_HEIGHT=PLOT_HEIGHT,
+)
+
 #### Identify potential acretted clusters ####
 # These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters.
 
