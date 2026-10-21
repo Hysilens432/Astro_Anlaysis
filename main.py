@@ -47,6 +47,9 @@ dataset = (
     .merge(vdb, on="Cluster_ID")
 )
 
+# Harris r_h is an angular size in arcmin; convert to pc using the distance R_Sun (kpc).
+dataset["r_h"] = dataset["R_Sun"] * 1000 * np.radians(dataset["r_h"] / 60)
+
 
 ### To investigate potential outliers, create a residuals plot for the Age vs FeH relationship.
 ### The code here creates a small dataset and a linear regression model.
