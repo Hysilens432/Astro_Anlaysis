@@ -3,6 +3,9 @@ from networkx import dispersion
 import utils.toolChain as tc
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 
 def run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT):
@@ -141,3 +144,23 @@ def run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT):
     radial_velocity = "v_r"
     dispersion = "sig_v"
     tc.compute_s0_5(dataset, radial_velocity, dispersion)
+
+    # Mstar vs S_0.5
+    fig, ax = plt.subplots(figsize=(PLOT_WIDTH, PLOT_HEIGHT))
+    sns.scatterplot(
+        data=dataset,
+        x="S_0.5",
+        y="Mstar",
+        s=50,
+        edgecolor="w",
+        alpha=0.85,
+        ax=ax,
+    )
+    ax.set(
+        xlabel="$S_{0.5}$ (km/s)",
+        ylabel="Stellar Mass $M_\\star$",
+        title="$S_{0.5}$ vs Stellar Mass",
+        xscale="log",
+    )
+    fig.savefig(Path("./output") / "Sk Plot.png")
+    plt.close(fig)

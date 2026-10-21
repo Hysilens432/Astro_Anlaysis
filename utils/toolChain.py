@@ -5,7 +5,6 @@ This utility module provides essential tools for use at main.py.
 import os
 import pandas as pd
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -80,6 +79,6 @@ def compute_s0_5(
 ):
     # Sk morphological parameter
     dataset["S_0.5"] = np.sqrt(
-        0.5 * np.square(np.abs(dataset[radial_velocity]))
+        0.5 * np.square(np.abs(dataset[radial_velocity]).fillna(0))
         + np.square(np.abs(dataset[dispersion].fillna(0)))
     )
