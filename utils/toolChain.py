@@ -81,5 +81,5 @@ def compute_s0_5(
     # Sk morphological parameter
     dataset["S_0.5"] = np.sqrt(
         0.5 * np.square(np.abs(dataset[radial_velocity]))
-        + np.square(np.abs(dataset[dispersion]))
+        + np.square(np.abs(dataset[dispersion].fillna(0)))
     )

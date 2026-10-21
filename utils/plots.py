@@ -140,8 +140,4 @@ def run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT):
     # Harris S0.5
     radial_velocity = "v_r"
     dispersion = "sig_v"
-    for i in dataset["sig_v"]:
-        if pd.isna(i):
-            dataset["sig_v"].fillna(0, inplace=True)
     tc.compute_s0_5(dataset, radial_velocity, dispersion)
-    print(dataset["S_0.5"])
