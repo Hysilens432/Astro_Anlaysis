@@ -7,6 +7,7 @@ For PHYS3116 Computational Assessment
 import pandas as pd
 import numpy as np
 import utils.toolChain as tc
+import utils.plots as plots
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -87,73 +88,7 @@ n = len(kr21_fit)
 residual_sd = np.sqrt(np.sum(kr21_fit["Residual"] ** 2) / (n - 2))
 kr21_fit["Standardised_Residual"] = kr21_fit["Residual"] / residual_sd
 
-# Velocity dispersion - Mass. Added colour coding with half light radius.
-tc.plot_scatter(
-    dataset=DATASET,
-    x="Mstar",
-    y="sig_v",
-    color="r_h",
-    colorbar_label="Half light radius (pc)",
-    xlabel="log(Mass) (log(M_sun))",
-    ylabel="Velocity Dispersion (km/s)",
-    title="Velocity Dispersion-Mass Relation with Half Light Radius",
-    filename="mstar_v_sigv.png",
-    xscale="log",
-    PLOT_WIDTH=PLOT_WIDTH,
-    PLOT_HEIGHT=PLOT_HEIGHT,
-)
-
-# FeH - Galactocentric distance, coloured by age.
-tc.plot_scatter(
-    dataset=DATASET,
-    x="R_gc",
-    y="FeH_Krause",
-    color="Age_Krause",
-    colorbar_label="Age (Gyr)",
-    xlabel="Galactocentric Distance (kpc)",
-    ylabel="Metallicity [Fe/H]",
-    title="Metallicity-Galactocentric Distance with Age for Krause Clusters",
-    filename="feh_rgc_age.png",
-    xscale="linear",
-    PLOT_WIDTH=PLOT_WIDTH,
-    PLOT_HEIGHT=PLOT_HEIGHT,
-)
-
-# Plot of Age vs FeH for only Krause to identify two branches. Coloured by Galactocentric distance.
-# Plot with color representing Galactocentric distance as a nice way to visualize the data.
-tc.plot_scatter(
-    dataset=DATASET,
-    x="FeH_Krause",
-    y="Age_Krause",
-    color="R_gc",
-    colorbar_label="Galactocentric Distance $R_{gc}$ (kpc)",
-    xlabel="Metallicity [Fe/H]",
-    ylabel="Age (Gyr)",
-    title="Krause Age-Metallicity Relation with Galactocentric Distance",
-    label="Krause Clusters",
-    filename="krause_age_feh.png",
-    xscale="linear",
-    PLOT_WIDTH=PLOT_WIDTH,
-    PLOT_HEIGHT=PLOT_HEIGHT,
-)
-
-
-# Plot of Age vs FeH for only van den Berg to identify two branches. Coloured by Galactocentric distance.rg Clusters",
-tc.plot_scatter(
-    dataset=DATASET,
-    x="FeH_vandenBerg",
-    y="Age_vandenBerg",
-    color="R_gc",
-    colorbar_label="Galactocentric Distance $R_{gc}$ (kpc)",
-    xlabel="Metallicity [Fe/H]",
-    ylabel="Age (Gyr)",
-    title="van den Berg Age-Metallicity Relation with Galactocentric Distance",
-    filename="vandenberg_age_feh.png",
-    xscale="linear",
-    PLOT_WIDTH=PLOT_WIDTH,
-    PLOT_HEIGHT=PLOT_HEIGHT,
-)
-
+plots.run_plots(DATASET, PLOT_WIDTH=10, PLOT_HEIGHT=8)
 
 #### Identify potential acretted clusters ####
 # These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters.
