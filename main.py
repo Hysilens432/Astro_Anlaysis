@@ -37,8 +37,8 @@ vdb["Cluster_ID"] = "NGC" + vdb["#NGC"].astype(str)
 # Rename Age and FeH columns to include which dataset they came from.
 vdb = vdb.rename(columns={"Age": "Age_vandenBerg", "FeH": "FeH_vandenBerg"})
 kr21 = kr21.rename(columns={"Age": "Age_Krause", "FeH": "FeH_Krause"})
-print(vdb.head())
-print(kr21.head())
+#print(vdb.head())
+#print(kr21.head())
 
 # Note: I simplified merge here. dataset should be constant unless wee wanna change it.
 dataset = (
@@ -46,50 +46,6 @@ dataset = (
     .merge(kr21, on="Cluster_ID")
     .merge(vdb, on="Cluster_ID")
 )
-
-# Harris r_h is an angular size in arcmin; convert to pc using the distance R_Sun (kpc).
-#dataset["r_h"] = dataset["R_Sun"] * 1000 * np.radians(dataset["r_h"] / 60)
-
-
-### To investigate potential outliers, create a residuals plot for the Age vs FeH relationship.
-### The code here creates a small dataset and a linear regression model.
-### This code here only does it for the van den Berg data.
-vdb_fit = dataset[["FeH_vandenBerg", "Age_vandenBerg"]].dropna().copy()
-# Generate a linear regression model - polynomial of degree 1
-slope_vdb, intercept_vdb = np.polyfit(
-    vdb_fit["FeH_vandenBerg"], vdb_fit["Age_vandenBerg"], 1
-)
-print("Slope:", slope_vdb)
-print("Intercept:", intercept_vdb)
-# Create a new column for predicted age of each cluster based on the regression
-vdb_fit["Age_predicted"] = intercept_vdb + slope_vdb * vdb_fit["FeH_vandenBerg"]
-# Calculate the residuals, which is actual age minus predicted age
-vdb_fit["Residual"] = vdb_fit["Age_vandenBerg"] - vdb_fit["Age_predicted"]
-
-### This code here only does it for the Krause data.
-kr21_fit = dataset[["FeH_Krause", "Age_Krause"]].dropna().copy()
-# Generate a linear regression model - polynomial of degree 1
-slope_kr21, intercept_kr21 = np.polyfit(
-    kr21_fit["FeH_Krause"], kr21_fit["Age_Krause"], 1
-)
-print("Slope:", slope_kr21)
-print("Intercept:", intercept_kr21)
-# Create a new column for predicted age of each cluster based on the regression
-kr21_fit["Age_predicted"] = intercept_kr21 + slope_kr21 * kr21_fit["FeH_Krause"]
-# Calculate the residuals, which is actual age minus predicted age
-kr21_fit["Residual"] = kr21_fit["Age_Krause"] - kr21_fit["Age_predicted"]
-
-
-# Normalised residuals for van den Berg data
-n = len(vdb_fit)
-# Divide by n - 2 as there are two estimated parameters. This is a standard statistical method.
-residual_sd = np.sqrt(np.sum(vdb_fit["Residual"] ** 2) / (n - 2))
-vdb_fit["Standardised_Residual"] = vdb_fit["Residual"] / residual_sd
-# Normalised residuals for Krause data
-n = len(kr21_fit)
-# Divide by n - 2 as there are two estimated parameters. This is a standard statistical method.
-residual_sd = np.sqrt(np.sum(kr21_fit["Residual"] ** 2) / (n - 2))
-kr21_fit["Standardised_Residual"] = kr21_fit["Residual"] / residual_sd
 
 plots.run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT)
 
@@ -115,12 +71,32 @@ print(age_metallicity_candidates[["Cluster_ID", "Age_Krause", "FeH_Krause"]])
 
 # Radial velocity - Galactocentric distance plot. These are clusters with high radial velocities that are far from the galactic center.
 radial_velocity_candidates = dataset[
-    (dataset["v_LSR"] > 300) | (dataset["v_LSR"] < -300)
+    (dataset["v_LSR"] > 300) | (dataset["v_LSR"] < -300) | ((dataset["R_gc"] > 8) & (dataset["R_gc"] < 12) & (dataset["FeH_Krause"] < 1.6) & (dataset["v_LSR"] > -200) & (dataset["v_LSR"] < 0))
 ]
-print(
-    "Potentially accreted clusters based on radial velocity and galactocentric distance:"
-)
+print("Potentially accreted clusters based on radial velocity and galactocentric distance:")
 print(radial_velocity_candidates[["Cluster_ID", "v_LSR", "R_gc"]])
+
+# Core relaxation time - galactocentric distance plot. These are clusters with long core relaxation times that are far from the galactic center.
+relaxation_time_candidates = dataset[
+    ((dataset["lg_tc"] < 6.7) & (dataset["R_gc"] > 5) & (dataset["R_gc"] < 7.5)) | ((dataset["lg_tc"] < 8) & (dataset["R_gc"] > 15))
+]
+print("Potentially accreted clusters based on core relaxation time and galactocentric distance:")
+print(relaxation_time_candidates[["Cluster_ID", "lg_tc", "R_gc"]])
+
+# Half light radius - Galactocentric distance plot. These are clusters with large half-light radii that are far from the galactic center.
+half_light_radius_candidates = dataset[
+    (dataset["r_h"] > 4) | ((dataset["R_gc"] > 8) & (dataset["R_gc"] < 11.5) & (dataset["FeH_Krause"] < -1.8))
+]
+print("Potentially accreted clusters based on half-light radius and galactocentric distance:")
+print(half_light_radius_candidates[["Cluster_ID", "r_h", "R_gc"]])
+
+# Concentration - velocity dispersion plot. These are clusters with low concentration and high velocity dispersions.
+concentration_candidates = dataset[
+    (dataset["c"] < 0.85) | (dataset["sig_v"] > 12) | (dataset["c"] == 2.5)
+]
+print("Potentially accreted clusters based on concentration and velocity dispersion:")
+print(concentration_candidates[["Cluster_ID", "c", "sig_v"]])
+
 
 # Identify clusters that appear at least twice in the above lists.
 all_candidates = pd.concat(
@@ -129,16 +105,26 @@ all_candidates = pd.concat(
         metallicity_candidates[["Cluster_ID"]],
         age_metallicity_candidates[["Cluster_ID"]],
         radial_velocity_candidates[["Cluster_ID"]],
+        relaxation_time_candidates[["Cluster_ID"]],
+        half_light_radius_candidates[["Cluster_ID"]],
+        concentration_candidates[["Cluster_ID"]],
     ]
 )
 
 id_counts = all_candidates["Cluster_ID"].value_counts()
+
+# Filter the dataset to only include clusters that appear in at least two of the above criteria.
 repeated_candidates = id_counts[id_counts > 1].index
 shortlist = dataset[dataset["Cluster_ID"].isin(repeated_candidates)]
+
+# Add a 'Count' column using the id_counts series
+shortlist["Count"] = shortlist["Cluster_ID"].map(id_counts)
+
+# Print the shortlist of clusters that appear in at least two of the above criteria.
 print("Clusters that appear in at least two of the above criteria:")
 print(
     shortlist[
-        ["Cluster_ID", "sig_v", "Mstar", "FeH_Krause", "R_gc", "Age_Krause", "v_LSR"]
+        ["Cluster_ID", "Count", "sig_v", "Mstar", "FeH_Krause", "R_gc", "Age_Krause", "v_LSR"]
     ]
 )
 
