@@ -3,11 +3,7 @@
 
 % constants
 
-const r0_kpc = 8.0; % 8) "Distance from Galactic center (kpc), assuming R_0=8.0 kpc" Harris one
-
-
-
-
+r0_kpc = 8.0; % 8) "Distance from Galactic center (kpc), assuming R_0=8.0 kpc" Harris one
 
 % Settings, Should be obvious w/ the names 
 limitsKpc = [20, 100];
@@ -26,7 +22,7 @@ style.dpi = 300; % resolution
 scriptDir = fileparts(mfilename('fullpath'));
 dataHi = fullfile(scriptDir, 'dataset/HarrisPartI.csv');
 dataHiii = fullfile(scriptDir, 'dataset/HarrisPartIII.csv');
-dataVDB = fullfile(scriptDir, 'dataset/vanDenBergh_table2.csv');
+dataVDB = fullfile(scriptDir, 'dataset/vandenBerg_table2.csv');
 dataKrause = fullfile(scriptDir, 'dataset/Krause21.csv');
 % code: Fe/H
 clusters = readCsv(dataHi, ["ID", "Name", "RA", "DEC"]);
@@ -34,11 +30,10 @@ krause = readCsv(dataKrause, ["Class", "Object", "AltName"]);
 
 % Literally the worst dataset in human existence
 vdb = readCsv(dataVDB,  ["#NGC", "Name", "Method", "Figs", "Range"]);
-vdb = renamevars(vdb, ["#NGC", "NGC"]);
+vdb = renamevars(vdb, "#NGC", "NGC");
 vdbName = vdb.Name;
 isNGC = vdb.NGC ~= "XXXX"; % why? just dont include them.
 vdbName(isNGC) = "NGC" + vdb.NGC(isNGC);
-
 
 clusters.key = clusterKey(clusters.ID);
 krause.key   = clusterKey(krause.Object);
@@ -47,7 +42,6 @@ vdb.key = clusterKey(vdbName);
 % edge case
 unmatched = [setdiff(krause.key, clusters.key); setdiff(vdb.key, clusters.key)]; % check fault
 
-
 [inVdb, iVdb]       = ismember(clusters.key, vdb.key);
 [inKrause, iKrause] = ismember(clusters.key, krause.key);
 clusters.FeH(inVdb)    = vdb.FeH(iVdb(inVdb));
@@ -55,14 +49,14 @@ clusters.FeH(inKrause) = krause.FeH(iKrause(inKrause));
 
 % coord from rgc
 
-clusters.xGC_kpc = clusters.X - R0_kpc; % X is heliocentric
+clusters.xGC_kpc = clusters.X - r0_kpc; % X is heliocentric
 clusters.yGC_kpc = clusters.Y;
 clusters.zGC_kpc = clusters.Z;
-
+% どうして　どうして　どうして　どうして
 % plot
 outDir = fullfile(scriptDir, "xyz_figures");
 for L = limitsKpc
-    fig = plotXYZ(clusters, R0_kpc, L, style);
+    fig = plotXYZ(clusters, r0_kpc, L, style);
     if saveFigures
         if ~isfolder(outDir)
             mkdir(outDir);
