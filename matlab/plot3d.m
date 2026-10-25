@@ -54,3 +54,21 @@ clusters.FeH(inVdb)    = vdb.FeH(iVdb(inVdb));
 clusters.FeH(inKrause) = krause.FeH(iKrause(inKrause));
 
 % coord from rgc
+
+clusters.xGC_kpc = clusters.X - R0_kpc; % X is heliocentric
+clusters.yGC_kpc = clusters.Y;
+clusters.zGC_kpc = clusters.Z;
+
+% plot
+outDir = fullfile(scriptDir, "xyz_figures");
+for L = limitsKpc
+    fig = plotGalacticXYZ(clusters, R0_kpc, L, style);
+    if saveFigures
+        if ~isfolder(outDir)
+            mkdir(outDir);
+        end
+        file = fullfile(outDir, sprintf("xyz_within_%gkpc.png", L));
+        exportgraphics(fig, file, 'Resolution', style.dpi);
+        fprintf('Saved %s\n', file);
+    end
+end
