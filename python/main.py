@@ -50,7 +50,6 @@ dataset = (
 plots.run_plots(dataset, PLOT_WIDTH, PLOT_HEIGHT)
 
 #### Identify potential acretted clusters ####
-# These are rough criteria for now. We will need to adjust them as we go. This was just a first pass to potentially identify some clusters.
 
 # Velocity  dispersion - Mass relation plot. Specifically, these have very high velocity dispersions for their mass,
 diffuse_candidates = dataset[(dataset["sig_v"] > 10)]
